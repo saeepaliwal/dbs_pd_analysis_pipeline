@@ -1,0 +1,89 @@
+\documentclass[10pt]{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{epsfig}
+\usepackage{comment}
+\numberwithin{equation}{subsection}
+\topmargin -1.5cm
+\oddsidemargin -0.04cm
+\evensidemargin -0.04cm
+\textwidth 16.59cm
+\textheight 21.94cm
+\parskip 7.2pt
+\parindent 0pt
+
+\title{Statistics of winning model}
+\author{Saee Paliwal}
+\begin{document}
+\maketitle
+\section{Static tables}
+\subsection{Table 1:}
+\begin{table}[htb!]
+\begin{center}
+  \begin{tabular}[htb!]{l|c|c}
+    Var 1 & Var 2 & Correlation\\
+    \hline\hline
+    Bet variance & Gamble Pct & 0.4187*\\
+    Bet variance & Bet Mean & 0.4892*\\
+    Bet mean & Gamble Pct & -0.0525\\
+    Bet switches & Bet mean & 0.1172\\
+    Cashout & Machine Switch Pct & 0.4604*\\
+  \end{tabular}
+  \caption{Noteworthy Pearson correlation coefficients from paradigm readouts. * indicates significant measures, Bonferroni corrected for a family size of 55 hypotheses (11 paradigm readouts) (p$<$0.0009). A full table of all correlations can be found in the Appendix.}
+\label{tab:paradigm stats}
+\end{center}
+\end{table}
+
+\subsection{Table 2:}
+
+\begin{table}[htb!]
+\begin{center}
+  \begin{tabular}{l|c|c|c|c|c|c|c|c}
+    Indep Var & Bet Var & Bet Mean & Bet Switch \% & Gamble \% & MS \% & CO \% &  R-sq & F-stat (p-val)\\
+    \hline
+    BIS Total & 0.0154 & 0.0964 & 20.0520 & 4.4198 & 8.3211 & 30.4175 & 0.3806 & 4.0972 (0.0027)\\
+    \scriptsize{T-stat} & \scriptsize{ 1.1487} &   \scriptsize{0.8721} & \scriptsize{1.3370} & \scriptsize{0.9486} & \scriptsize{ 0.4430} & \scriptsize{1.9963} & &\\
+    \scriptsize{p-val} & \scriptsize{0.2575} & \scriptsize{0.3883} & \scriptsize{0.1888} & \scriptsize{0.3485} & \scriptsize{0.6602} & \scriptsize{0.0527} & \\
+    \end{tabular}
+    \caption{BIS regression on major paradigm readouts (as indicated in Box 1). MS is Machine Switch and CO is cashout.}
+    \label{tab:BISreg1}
+    \end{center}
+\end{table}
+\pagebreak
+
+\section{Stats of winning model}
+
+\begin{comment}
+\subsection{Clustering }
+\begin{figure}[htb!]
+\centering
+\includegraphics[scale=0.5]{bestmodel_by_subj.pdf}
+\label{fig:clustresults}
+\end{figure}
+\end{comment}
+
+\subsection{Table 3:}
+\input{gp_table3}
+\pagebreak
+\subsection{Table 4:}
+\input{gp_table4}
+
+\subsection{Table 5:}
+\input{gp_table5}
+\pagebreak
+\subsection{Table 6:}
+\input{gp_table6}
+
+\begin{comment}
+\subsection{Clustering }
+\begin{figure}[htb!]
+\centering
+\includegraphics[scale=0.75]{parclust.pdf}
+\caption{Clustering solution on model parameters omega and theta. The red cluster includes subjects with lower impulsivity, and the blue cluster consists of subjects with higher impulsivity. Yellow squares indicate BIS levels below 73 and green squares, above. Contour lines represent one standard deviation.}
+\label{fig:clustresults}
+\end{figure}
+\end{comment}
+
+
+
+\end{document}
