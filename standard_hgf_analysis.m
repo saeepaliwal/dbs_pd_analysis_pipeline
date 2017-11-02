@@ -8,7 +8,7 @@ PATH_TO_RESULTS_FOLDER = ['~/polybox/Projects/DBS_ParkinsonsPatients/results/' A
 PAPER = 1;
 HHGF = 1;
 
-%STATS_STRUCT = ['~/polybox/Projects/BreakspearCollab/results/' ANALYSIS_NAME '/stats_DoubleHGF_' ANALYSIS_NAME '.mat'];
+STATS_STRUCT = ['~/Dropbox/Doctorate/projects/DBS_PD/data/stats_PRE_DBS.mat'];
 
 % Run analyses
 all_analysis_wrapper
@@ -24,7 +24,7 @@ PATH_TO_RESULTS_FOLDER = ['~/polybox/Projects/DBS_ParkinsonsPatients/results/' A
 PAPER = 1;
 HHGF = 1;
 
-%STATS_STRUCT = ['~/polybox/Projects/DBS_ParkinsonsPatients/results/' ANALYSIS_NAME '/stats_DoubleHGF_' ANALYSIS_NAME '.mat'];
+STATS_STRUCT = ['~/Dropbox/Doctorate/projects/DBS_PD/data/stats_POST_DBS.mat'];
 
 % Run analyses
 all_analysis_wrapper
