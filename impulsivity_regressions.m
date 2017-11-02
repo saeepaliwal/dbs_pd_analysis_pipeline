@@ -1,34 +1,44 @@
 function impulsivity_regressions(analysis, exclude)
-% analysis can be 'pre', 'post', or 'both'
+% analysis can be 'PRE_DBS', 'POST_DBS', or 'both'
+
+DATA_DIR = '~/polybox/Projects/DBS_ParkinsonsPatients/results/';
 
 %% Load parameters
 ANALYSIS_NAME = 'PRE_DBS';
-STATS_STRUCT = ['~/polybox/Projects/BreakspearCollab/results/' ANALYSIS_NAME '/stats_DoubleHGF_' ANALYSIS_NAME '.mat'];
-PARS_WORKSPACE = ['~/polybox/Projects/BreakspearCollab/results/' ANALYSIS_NAME '/parameter_workspace_hhgf.mat'];
+STATS_STRUCT = [DATA_DIR ANALYSIS_NAME '/stats_DoubleHGF_' ANALYSIS_NAME '.mat'];
+PARS_WORKSPACE = [DATA_DIR ANALYSIS_NAME '/parameter_workspace_hhgf.mat'];
 load(PARS_WORKSPACE)
 load(STATS_STRUCT);
 stats_pre = stats;
 omega_pre = log(pars.omega);
 theta_pre = log(pars.theta);
 
-% for i = 1:length(stats{1}.labels)
-%     pe = sum(stats{1}.hgf.bin(i).traj.da,1);
-%     pe_pre(i) = pe(2);
-% end
-
 ANALYSIS_NAME = 'POST_DBS';
-STATS_STRUCT = ['~/polybox/Projects/BreakspearCollab/results/' ANALYSIS_NAME '/stats_DoubleHGF_' ANALYSIS_NAME '.mat'];
-PARS_WORKSPACE = ['~/polybox/Projects/BreakspearCollab/results/' ANALYSIS_NAME '/parameter_workspace_hhgf.mat'];
+STATS_STRUCT = [DATA_DIR ANALYSIS_NAME '/stats_DoubleHGF_' ANALYSIS_NAME '.mat'];
+PARS_WORKSPACE = [DATA_DIR ANALYSIS_NAME '/parameter_workspace_hhgf.mat'];
 load(PARS_WORKSPACE)
 load(STATS_STRUCT);
 stats_post = stats;
 omega_post = log(pars.omega);
 theta_post = log(pars.theta);
 
-% for i = 1:length(stats{1}.labels)
-%     pe = sum(stats{1}.hgf.bin(i).traj.da,1);
-%     pe_post(i) = pe(2);
-% end
+%% Print to CSV
+fid = fopen([DATA_DIR 'pre_post_parameters.csv'],'w');
+fprintf(fid,'%s\n','Pre-DBS');
+fprintf(fid,'%s\n','Patient Name,Omega,Theta');
+
+for i = 1:length(stats_pre{1}.labels)
+    fprintf(fid,'%s,%0.4f,%0.4f\n',stats_pre{1}.labels{i},omega_pre(i),theta_pre(i));
+end
+
+fprintf(fid,'%s\n','Post-DBS');
+fprintf(fid,'%s\n','Patient Name,Omega,Theta');
+
+for i = 1:length(stats_post{1}.labels)
+    fprintf(fid,'%s,%0.4f,%0.4f\n',stats_post{1}.labels{i},omega_post(i),theta_post(i));
+end
+fclose(fid);
+
 
 %% Pull out equivalent patient indices
 for i = 1:length(stats_pre{1}.labels)
@@ -59,9 +69,8 @@ end
 omega_diff = omega_post(post_idx)-omega_pre(pre_idx);
 theta_diff = theta_post(post_idx)-theta_pre(pre_idx);
 
-%pe_diff = pe_post(post_idx) - pe_pre(pre_idx);
 %% Load questionnaires
-Q_STRUCT = '~/polybox/Projects/BreakspearCollab/results/questionnaire_struct.mat';
+Q_STRUCT = [DATA_DIR 'questionnaire_struct.mat'];
 load(Q_STRUCT)
 
 %% Pull out equivalent patient indices
@@ -72,10 +81,10 @@ if strcmp(analysis,'post')
         stats_data(i) = str2double(out{:});
     end
 elseif strcmp(analysis,'pre')
-        for i = 1:length(stats{1}.labels)
+    for i = 1:length(stats{1}.labels)
         out = regexp(stats_pre{1}.labels(i),'\d*','Match');
         stats_data(i) = str2double(out{:});
-        end
+    end
 end
 
 for i = 1:length(q.labels)
@@ -87,6 +96,8 @@ end
 q_data = q_data(~ismember(q_data,exclude));
 
 % Construct relevant index with questionnaire data
+% s_idx is the subject indices for the parameters
+% q_idx is the questionnaire indices for the questionnarie data
 if strcmp(analysis,'both')
     pre_and_post = pre_and_post(~ismember(pre_and_post,exclude));
     [patient_list, q_idx, s_idx] = intersect(q_data,pre_and_post);

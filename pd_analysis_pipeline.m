@@ -5,7 +5,7 @@ addpath(genpath('~/Dropbox/Doctorate/tools/spm12'));
 addpath(genpath('~/Dropbox/Doctorate/tools/tapas/'));
 
 % Patients to exclude
-exclude = [55];
+exclude = [];
 
 %% Organize all data, run model from Paliwal, Petzschner et al
 questionnaires = 0;

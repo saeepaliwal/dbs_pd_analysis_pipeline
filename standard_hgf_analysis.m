@@ -1,14 +1,14 @@
 %% Pre DBS
 % Specify paths for data saving
 ANALYSIS_NAME = 'PRE_DBS';
-LIST_OF_SUBJECT_DIRECTORIES = ['~/polybox/Projects/BreakspearCollab/' ANALYSIS_NAME];
-PATH_TO_RESULTS_FOLDER = ['~/polybox/Projects/BreakspearCollab/results/' ANALYSIS_NAME '/'];
+LIST_OF_SUBJECT_DIRECTORIES = ['~/polybox/Projects/DBS_ParkinsonsPatients/' ANALYSIS_NAME];
+PATH_TO_RESULTS_FOLDER = ['~/polybox/Projects/DBS_ParkinsonsPatients/results/' ANALYSIS_NAME '/'];
 
 % Run winning model from Paliwal Petzschner et al 2014
 PAPER = 1;
 HHGF = 1;
 
-STATS_STRUCT = ['~/polybox/Projects/BreakspearCollab/results/' ANALYSIS_NAME '/stats_DoubleHGF_' ANALYSIS_NAME '.mat'];
+%STATS_STRUCT = ['~/polybox/Projects/BreakspearCollab/results/' ANALYSIS_NAME '/stats_DoubleHGF_' ANALYSIS_NAME '.mat'];
 
 % Run analyses
 all_analysis_wrapper
@@ -17,14 +17,14 @@ all_analysis_wrapper
 
 % Specify paths for data saving
 ANALYSIS_NAME = 'POST_DBS';
-LIST_OF_SUBJECT_DIRECTORIES = ['~/polybox/Projects/BreakspearCollab/' ANALYSIS_NAME];
-PATH_TO_RESULTS_FOLDER = ['~/polybox/Projects/BreakspearCollab/results/' ANALYSIS_NAME '/'];
+LIST_OF_SUBJECT_DIRECTORIES = ['~/polybox/Projects/DBS_ParkinsonsPatients/' ANALYSIS_NAME];
+PATH_TO_RESULTS_FOLDER = ['~/polybox/Projects/DBS_ParkinsonsPatients/results/' ANALYSIS_NAME '/'];
 
 % Run winning model from Paliwal Petzschner et al 2014
 PAPER = 1;
 HHGF = 1;
 
-STATS_STRUCT = ['~/polybox/Projects/BreakspearCollab/results/' ANALYSIS_NAME '/stats_DoubleHGF_' ANALYSIS_NAME '.mat'];
+%STATS_STRUCT = ['~/polybox/Projects/DBS_ParkinsonsPatients/results/' ANALYSIS_NAME '/stats_DoubleHGF_' ANALYSIS_NAME '.mat'];
 
 % Run analyses
 all_analysis_wrapper
