@@ -29,20 +29,20 @@ STATS_STRUCT = ['~/Dropbox/Doctorate/projects/DBS_PD/data/stats_POST_DBS.mat'];
 % Run analyses
 all_analysis_wrapper
 
-%% Pull in questionnaire data
-if questionnaires
-    Q_FILE = '~/polybox/Projects/BreakspearCollab/Longitudinal_Data_Subjects_TNU.xlsx';
-    
-    [q] = excel_to_questionnaire(Q_FILE)
-    
-    save('~/polybox/Projects/BreakspearCollab/results/questionnaire_struct.mat','q');
-end
-%% Pull in anatomical data
-if anatomical
-    ANATOMICAL_FILE = '~/polybox/Projects/BreakspearCollab/Anatomical_Data_TNU.xlsx';
-    [ad] = excel_to_questionnaire(ANATOMICAL_FILE);
-    
-    save('~/polybox/Projects/BreakspearCollab/results/anatomical_struct.mat','ad');
-end
-
+% %% Pull in questionnaire data
+% if questionnaires
+%     Q_FILE = '~/polybox/Projects/BreakspearCollab/Longitudinal_Data_Subjects_TNU.xlsx';
+%     
+%     [q] = excel_to_questionnaire(Q_FILE)
+%     
+%     save('~/polybox/Projects/BreakspearCollab/results/questionnaire_struct.mat','q');
+% end
+% %% Pull in anatomical data
+% if anatomical
+%     ANATOMICAL_FILE = '~/polybox/Projects/BreakspearCollab/Anatomical_Data_TNU.xlsx';
+%     [ad] = excel_to_questionnaire(ANATOMICAL_FILE);
+%     
+%     save('~/polybox/Projects/BreakspearCollab/results/anatomical_struct.mat','ad');
+% end
+% 
 
