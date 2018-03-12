@@ -1,7 +1,7 @@
 function  [FE_HH, FE_RW, llh_all,kappa_all, omega_all, theta_all, beta_all] = collect_model_info_TI(subject_type,stats)
 
 % Pull out DoubleHGF parameter estimates
-% FE will be 1x3 and kappa, etc will be subjectsx3
+
 runs = length(stats{subject_type}.hhgf_est);
 for r = 1:runs
     hh = stats{subject_type}.hhgf_est{r};

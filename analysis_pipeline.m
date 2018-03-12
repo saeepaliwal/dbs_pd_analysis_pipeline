@@ -16,8 +16,8 @@ D.SPREADSHEET_DIR = [D.PROJECT_FOLDER 'data_spreadsheets/'];
 
 % Results directories
 D.RESULTS_DIR = [D.PROJECT_FOLDER 'eduardo_rerun/'];
-D.FIGURES_DIR = [D.DATA_DIR 'figures/'];
-D.REGRESSION_DIR = [D.DATA_DIR 'regressions/'];
+D.FIGURES_DIR = [D.RESULTS_DIR 'figures/'];
+D.REGRESSION_DIR = [D.RESULTS_DIR 'regressions/'];
 
 % Create any necessary directories
 results_dirs = {'RESULTS_DIR';...
@@ -44,7 +44,7 @@ PARAMETER_SPREADSHEET = [D.RESULTS_DIR 'DBS_PD_pre_post_parameters.csv'];
 %% Set analysis flags
 
 % Invert HHGF
-flags.run_hhgf = 0;
+flags.run_hhgf = 1;
 
 % Load questionnaire and anatomical data
 flags.load_q_and_a = 1;

@@ -62,8 +62,8 @@ save(STATS_STRUCT,'stats');
 
 pars_of_interest = {'omega';'theta';'beta'};
 for  iSub = subject_type
-    %[m idx] = max(stats{1}.FE_grid); % winning model from pre-DBS timepoint
-    idx = 1;
+    %[m idx] = max(stats{1}.FE_grid); 
+    idx = 1; % winning model from pre-DBS timepoint
     stats{iSub}.winning_model = idx;
     
     for p = 1:length(pars_of_interest)

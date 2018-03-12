@@ -1,6 +1,7 @@
 function stats = run_all_models_HHGF(stats, subject_type,P)
 % Double HGF on response models
-resp_models = {'tapas_softmax_binary'; 'tapas_softmax_binary_invsig2';'rescorla_wagner'}
+resp_models = {'tapas_softmax_binary'; 'tapas_softmax_binary_invsig2';}
+%'rescorla_wagner'}
 
 for r = 1:length(resp_models)
     resp_model = resp_models{r};

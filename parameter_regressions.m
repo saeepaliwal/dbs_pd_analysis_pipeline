@@ -11,7 +11,6 @@ bdi_diff = stats{2}.BDI' - stats{1}.BDI';
     
 %% Define fields of interest
 fields = {'BIS'}
-  %  ,'BIS_Attentional','BIS_Motor','BIS_NonPlanning','QUIP','UPDRS'};
 
 %% Run behavioral regressions, pre and post
 depvar = {'omega';'theta';'beta'};
@@ -59,25 +58,7 @@ for s = 1:2
 end
 
 clear all_p
-% 
-% %% Run behavioral regressions, pre predicting post
-% X = [log(stats{1}.omega) log(stats{1}.theta) stats{1}.BDI']; 
-% stage = 'Pre predicting post';
-% fprintf('\n%s\n\n','Pre parameters predicting post');
-% for f = 1:length(fields)
-%     y = stats{2}.(fields{f});
-%     r = regstats(y,X,'linear');
-%     r.y = y;
-%     r.X = X;
-%     all_p(f) = r.fstat.pval;
-%     reg_vals(r,stage,fields{f});
-%     if any(r.cookd > 1)
-%         keyboard
-%     end
-% end
-% 
-% [h crit_p adj_p]=fdr_bh(all_p);
-% clear all_p
+
 %% Run behavioral regressions, change predicting change
 fields = {'BIS'};
 X = [omega_diff theta_diff];
@@ -115,28 +96,7 @@ for f = 1:length(fields)
 
 end
 [h crit_p adj_p]=fdr_bh(all_p);
-% 
-% %% Run behavioral regressions, pre versus post
-% fields = {'QUIP'};
-% X = [omega_diff theta_diff ledd_diff];
-% 
-% depvar = {'omega_diff';'theta_diff';'beta_diff'};
-% stage = ' Param Diff';
-% fprintf('\n%s\n\n','Parameter differences and questionnaire differences');
-% for f = 1:length(fields)
-%     y = longitudinal.(fields{f});
-%     r = regstats(y,X,'linear');
-%     r.y = y;
-%     r.X = X;
-%     all_p(f) = r.fstat.pval;
-%     reg_vals(r,stage,fields{f});
-%     if any(r.cookd > 1)
-%         keyboard
-%     end
-% end
-% 
-% [h crit_p adj_p]=fdr_bh(all_p);
-% clear all_p
+
 
 %% Pre predicting max  change
 fprintf('\n%s\n\n','PRE-DBS predicting max diff');
@@ -145,7 +105,7 @@ X = [log(stats{1}.omega) log(stats{1}.theta) stats{1}.BDI'];
 fields = {'BIS_MaxIncrease'}; 
 stage = 'Param Pre';
 for f = 1:length(fields)
-    y = stats{2}.(fields{f});
+    y = stats{1}.(fields{f});
     r = regstats(y,X,'linear');
     r.y = y;
     r.X = X;
@@ -154,9 +114,5 @@ for f = 1:length(fields)
 
 end
 [h crit_p adj_p]=fdr_bh(all_p);
-% y = stats{2}.Signif_Psych';
-% [b,dev,logit_stats] =  glmfit(X,y,'binomial','link','logit');
-% logit_stats.p
-
 
 
