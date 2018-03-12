@@ -1,21 +1,11 @@
-function BMS_analysis(results_dir,analysis_name, subject_type)
-home = pwd;
-cd(results_dir)
-load('parameter_workspace.mat')
-cd(home);
+function stats = BMS_analysis(stats, subject_type, TI)
 
-%% BMS analysis
-%{
-for i = percept
-	allbinFE = squeeze(binFEgrid(i,:,:))';
-	[allBMS{1},allBMS{2},allBMS{3}] = spm_BMS([allbinFE]);
+if TI
+    binFEgrid = stats{subject_type}.llh;
+else
+    binFEgrid = squeeze(stats{subject_type}.binFEgrid)';
 end
 
+[bms.alpha,bms.exp_r,bms.xp,bms.pxp,bms.bor] = spm_BMS(binFEgrid);
 
-%}
-
-FE_grid = squeeze(pars.FE);
-FE_grid = FE_grid';
-[allBMS{1},allBMS{2},allBMS{3}] = spm_BMS(FE_grid);
-
-save ([results_dir 'bms_results_' sprintf('%d',subject_type)], 'allBMS');
+stats{subject_type}.bms_results = bms;

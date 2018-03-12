@@ -61,7 +61,7 @@ for i = 1:length(subjects)
         [no_gamble, cashout, lenOfPlay] = parse_output_short(t.name);
     else
         load result_sequence     
-        [no_gamble, cashout, lenOfPlay, current_machine, bet_size, account] = parse_output_short(t.name);
+        [no_gamble, cashout, lenOfPlay, current_machine, bet_size, account, pressed_stop] = parse_output_short(t.name);
     end
        
     % Performance
@@ -77,6 +77,9 @@ for i = 1:length(subjects)
     
     % Cashout
     cashout = cashout(6:end_idx)';
+    
+    % Pressed stop
+    pressed_stop = double(pressed_stop(6:end_idx)');
     
     % Probability trace
     P = str2num(result_sequence(6:end_idx,1));
@@ -105,6 +108,7 @@ for i = 1:length(subjects)
         cashout(end+1:100) = 0;
         switches(end+1:100) = 0;
         current_machine(end+1:100) = 0;
+        pressed_stop(end+1:100) = 0;
     end
     
     % Summary statistics:
@@ -113,6 +117,9 @@ for i = 1:length(subjects)
     
     % Mean of bet behav
     stats.B_mean(i) = mean(bets);
+    
+    % Pressing stop button
+    stats.pressed_stop(i) = sum(pressed_stop);
         
     % Percentage cashouts:
     stats.cashoutPct(i) = sum(nansum(cashout))/length(cashout);
@@ -154,6 +161,7 @@ for i = 1:length(subjects)
     % Save trajectories
     stats.data{i}.name = subject_name;
     stats.data{i}.bets = bets;
+    stats.data{i}.pressed_stop = pressed_stop;
     stats.data{i}.machineSwitches = switches;
     stats.data{i}.cashout = cashout;
     stats.data{i}.gamble = gamble;

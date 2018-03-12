@@ -1,44 +1,31 @@
 function [q] = excel_to_questionnaire(FILENAME)
 % Run function:
 % [questionnaire_struct] = excel_to_questionnaire_struct(FILENAME, varargin: extra_fields)
-[data text raw] = xlsread(FILENAME);
-fields = text(1,2:end);
+[data,text,raw] = xlsread(FILENAME);
 
-% %% Pull all total fields
-% total_idx = [];
-% for i = 1:length(fields)
-%     if strfind(fields{i},'ID')
-%         id_idx = i;
-%     else      
-%         total_idx = [total_idx i];
-%     end
-% end
-
-total_idx = 1:size(data,2);
-% 
-% %% Pull extra fields
-% if length(varargin)>0
-%     for n = 1:length(varargin)
-%         for m = 1:length(fields)
-%             if strfind(fields{m},varargin(n))
-%                 extra_idx = m;
-%             end
-%         end
-%     end
-% end
+fields = text(1,:);
 
 %% Append fields to structure
 q = struct;
-q.labels = text(2:end,1);
-for k = total_idx
-    fieldname = strrep(fields{total_idx(k)},' ','_');
+q.labels = data(:,1);
+for k = 1:size(data,2)
+    fieldname = strrep(fields{k},' ','_');
     fieldname = strrep(fieldname,'-','_');
     fieldname = strrep(fieldname,'&','_');
     fieldname = strrep(fieldname,'(','_');
     fieldname = strrep(fieldname,')','_');
     fieldname = strrep(fieldname,'/','_');
-    q.(fieldname) = data(:,total_idx(k));
+    fieldname = strrep(fieldname,'.','_');
+    q.(fieldname) = data(:,k);
 end
 
-
-
+% Fix gender, if it exists
+if isfield(q,'Sex')
+    for i = 1:size(data,1)
+        if strcmp(raw{i+1,2},'F')
+            q.Sex(i) = 1;
+        else
+            q.Sex(i) = 0;
+        end
+    end
+end

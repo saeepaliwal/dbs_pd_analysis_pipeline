@@ -8,11 +8,6 @@ end
 
 
 if TI
-    % Double HGF on paper response model
-    %run_num = 1;
-    %stats = run_hhgf(subject_type,run_num,'tapas_softmax_binary_invsig2',stats,P);
-    
-    % Double HGF on paper response model
     run_num = 1;
     stats = run_hhgf(subject_type,run_num,'tapas_softmax_binary_invsig2',stats,P);
     

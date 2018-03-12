@@ -1,10 +1,11 @@
-function [no_gamble, cashout, lenOfPlay, machine, bet_size, account] = parse_output_short(filename)
+function [no_gamble, cashout, lenOfPlay, machine, bet_size, account, pressed_stop] = parse_output_short(filename)
 
 f = fopen(filename,'r');
 totaltrials = 105;
 cashout = zeros(1,totaltrials);
 no_gamble = ones(1,totaltrials);
 bet_size = zeros(1,totaltrials);
+pressed_stop = zeros(1,totaltrials);
 account = [];
 trialnum = [1];
 training = false;
@@ -23,9 +24,9 @@ while ~feof(f)
         [tok remain] = strtok(remain,' ');
         parsed{end+1} = tok;
     end
-    
+
     tnum = [];
-    if strcmp(parsed(1),'Trial')
+    if strcmp(parsed(1),'Trial') & length(parsed)==7
         tnum = str2num(parsed{2}(1:end-1))+1;
         
         if trialnum(end) ~= tnum
@@ -34,6 +35,8 @@ while ~feof(f)
         end
     elseif strcmp(parsed(1),'Did') & strcmp(parsed(2),'not') & strcmp(parsed(3),'gamble')
         no_gamble(currenttrial) = 0;
+    elseif length(parsed)==6 & strcmp(parsed(3),'Stopping')
+        pressed_stop(currenttrial) = 1;
     elseif strcmp(parsed(1),'Cashing') & strcmp(parsed(2),'out')
         cashout(currenttrial) = 1;
     elseif strcmp(parsed(1),'Summary')

@@ -1,129 +1,145 @@
-function behavioral_regressions(exclude)
-analysis = 'both';
+function behavioral_regressions(stats)
 
-%%
-ANALYSES= {'PRE_DBS';'POST_DBS'};
-load all_patients
+%% Define fields of interest
+fields = {'BIS' ,'BIS_NonPlanning','BIS_Motor','BIS_Attentional'};
+%fields = {'QUIP'};
 
-bets = zeros(100,2,length(all_patients));
-ms = zeros(length(all_patients),2);
-gam = zeros(length(all_patients),2);
-for k = 1:length(ANALYSES)
-    ANALYSIS_NAME = ANALYSES{k};
-    STATS_STRUCT = ['~/polybox/Projects/BreakspearCollab/results/' ANALYSIS_NAME '/stats_' ANALYSIS_NAME '.mat'];
-    load(STATS_STRUCT);
-    
-    for i = 1:length(stats{1}.labels)
-        
-        out = regexp(stats{1}.labels(i),'\d*','Match');
-        num = str2double(out{:});
-        
-        idx = find(all_patients == num);
-        
-        bets(:,k,idx) = stats{1}.data{i}.bets;
+%% Pull out behavioral data
+
+for s = 1:2
+    data.bets(:,s) = stats{s}.bets;
+    data.machine_switches(:,s) = stats{s}.machine_switches
+    data.gamble(:,s) = stats{s}.gamble;
+    data.cashout(:,s) = stats{s}.cashout;
+end
+
+
+% Differences
+data_fields = {'bets';'machine_switches';'gamble';'cashout'};
+for d = 1:length(data_fields)
+    new_field = [data_fields{d} '_diff'];
+    data.(new_field) = data.(data_fields{d})(:,2)-...
+        data.(data_fields{d})(:,1);
+end
+
+%% BIS and BDI regression
+for i = 1:2
+    [rho(i) p(i)]= corr(stats{i}.BIS', stats{i}.BDI');
+end
+[r2 p2] = corr(stats{2}.BIS'-stats{1}.BIS', stats{2}.BDI'-stats{1}.BDI');
+
+%% Run behavioral regressions, pre and post
+depvar = {'Bets';'Machine Switches';'Gamble'};
+for s = 1:2
+    if s == 1
+        fprintf('\n%s\n\n\n',['PRE-DBS regressions']);
+    else
+        fprintf('\n%s\n\n\n',['POST-DBS regressions']);
     end
-    ms(1:length(stats{1}.switchPct),k) = stats{1}.switchPct';
-    gam(1:length(stats{1}.switchPct),k) = stats{1}.gamblePct';
-end
 
-for i = 1:length(all_patients)
-    bet_mean_pre(i,:) = mean(bets(:,1,i));
-    bet_var_pre(i,:) = var(bets(:,1,i));
-
-    bet_mean_post(i,:) = mean(bets(:,2,i));
-    bet_var_post(i,:) = var(bets(:,2,i));
-
-    bet_mean_diff(i,:) = bet_mean_post(i) - bet_mean_pre(i);
-    bet_var_diff(i,:) = bet_var_post(i) - bet_var_pre(i);
-end
-
-ms_diff = ms(:,2) - ms(:,1);
-gam_diff = gam(:,2) - gam(:,1);
-
-%% Load questionnaires
-Q_STRUCT = '~/polybox/Projects/BreakspearCollab/results/questionnaire_struct.mat';
-load(Q_STRUCT)
-
-for i = 1:length(q.labels)
-    out = regexp(q.labels(i),'\d*','Match');
-    q_data(i) = str2double(out{:});
-end
-
-% Pull out excluded subjects
-q_data = q_data(~ismember(q_data,exclude));
-all_patients = all_patients(~ismember(all_patients,exclude));
-
-[patient_list, q_idx, s_idx] = intersect(q_data,all_patients);
-
-%% Anatomical regressions on behavior
-if strcmp(analysis,'pre')
-    fields = {'Pre_LEDD','Pre_CarerBIS_Total','Pre_BIS_Total','Pre_Hayling_ABErrorScore','Max_BIS_Change',...
-        'Pre_ELF_RuleViolations','Case__Yes_No_','Pre_EQ_Total','Pre_CarerEQ_Total'};
-    
-    X = [bet_mean_pre ms(:,1) gam(:,1)];
-    X = X(s_idx,:);
-    
     % Behavioral regressions
     for f = 1:length(fields)
-        y = q.(fields{f})(q_idx);
-        reg_results{f} = regstats(y,X,'linear');
-        display(sprintf('%s: %0.4f (%0.4f)',fields{f}, reg_results{f}.fstat.f,reg_results{f}.fstat.pval));
-    end
-    
-elseif strcmp(analysis,'post')
-    
-    fields = {'FU3_CarerBIS_Total','FU3_BIS_Total','FU3_BIS_NonPlanning','FU3_BIS_Attentional','FU3_LN_HaylingABErrorScore',...
-        'FU3_LN_ELF_RuleViolations','LN_Max_HaylingABErrorScore_Change','Case__Yes_No_','FU3_EQ_Total','FU3_CarerEQ_Total'};
-    
-    X = [bet_mean_post ms(:,2) gam(:,2) ];
-    X = X(s_idx,:);
-    
-    for f = 1:length(fields)
-        y = q.(fields{f})(q_idx);
-        reg_results{f} = regstats(y,X,'linear');
-        display(sprintf('%s: %0.4f (%0.4f)',fields{f}, reg_results{f}.fstat.f,reg_results{f}.fstat.pval));
-    end
-   
+        
+        if strcmp(fields{f},'QUIP')
+            X = [data.bets(:,s) data.machine_switches(:,s)...
+                data.gamble(:,s) stats{1}.LEDD'];
+        else
+            X = [data.bets(:,s) data.machine_switches(:,s)...
+                data.gamble(:,s) stats{s}.BDI'];
+        end
+        
+        y = stats{s}.(fields{f})';
+        r = regstats(y,X,'linear');
+        r.y = y;
+        r.X = X;
+        if s == 1
+            title = 'Behav PRE-DBS';
 
-elseif strcmp(analysis,'both')
+        else
+            title = 'Behav POST-DBS';
+        end
+        
+        all_p_f(f,s) = r.fstat.pval;
+        all_p_t(f,:) = r.tstat.pval(2:end-1)';
+        
+        reg_vals(r,title,fields{f});
+       if any(r.cookd>1)
+            keyboard
+        end
+        if contains(fields{f},'Max')
+            longitudinal.(fields{f}) = stats{2}.(fields{f});
+        else
+            longitudinal.(fields{f}) = stats{2}.(fields{f})-stats{1}.(fields{f});
+        end
+    end
     
-    fields = {'LN_Max_HaylingABErrorScore_Change','Max_CarerBIS_Change','Max_BIS_Change','Max_QUIP_Change','Case__Yes_No_',...
-        'Max_CarerEQ_Change','Max_EQ_Change'};
     
-    X = [bet_mean_diff ms_diff gam_diff];
-    X = X(s_idx,:);
-   
-    for f = 1:length(fields)
-        y = q.(fields{f})(q_idx);
-        reg_results{f} = regstats(y,X,'linear');
-        display(sprintf('%s: %0.4f (%0.4f)',fields{f}, reg_results{f}.fstat.f,reg_results{f}.fstat.pval));
+    post_hoc_t = reshape(all_p_t',12,1);
+    [corr_t] = bonf_holm(post_hoc_t);
+end
+
+
+%% Run behavioral regressions, pre versus post
+X = [data.bets_diff data.machine_switches_diff ...
+    data.gamble_diff];
+title = 'Behav Diff';
+fprintf('\n%s\n\n','Behavior differences and questionnaire differences');
+for f = 1:length(fields)
+    y = longitudinal.(fields{f});
+    r = regstats(y,X,'linear');
+    r.y = y;
+    r.X = X;
+    all_p(f) = r.fstat.pval;
+    reg_vals(r,title,fields{f});
+    if any(r.cookd>1)
+        keyboard
     end
     
 end
+[h crit_p adj_p]=fdr_bh(all_p);
+clear all_p
 
-keyboard
+%% Pre predicting change
+fprintf('\n%s\n\n','PRE-DBS behavior predicting differences');
+X = [data.bets(:,1) data.machine_switches(:,1)...
+    data.gamble(:,1) stats{1}.BDI'];
+title = 'Behav Pre-to-Change';
+for f = 1:length(fields)
+    y = longitudinal.(fields{f});
+    r = regstats(y,X,'linear');
+    r.y = y;
+    r.X = X;
+    all_p(f) = r.fstat.pval;
+    reg_vals(r,title,fields{f});
+    if r.cookd > 1
+        keyboard
+    end
+end
+[h crit_p adj_p]=fdr_bh(all_p);
+clear all_p
+%% Pre predicting Post
+fprintf('\n%s\n\n','PRE-DBS behavior predicting FU3');
+X = [data.bets(:,1) data.machine_switches(:,1)...
+    data.gamble(:,1) stats{1}.BDI'];
+fields = {'ELF_MaxIncrease'}
+title = 'Behav Pre-to-Post';
+for f = 1:length(fields)
+    y = stats{2}.(fields{f});
+    r = regstats(y,X,'linear');
+    r.y = y;
+    r.X = X;
+    all_p(f) = r.fstat.pval;
+    reg_vals(r,title,fields{f});
+    if any(r.cookd>1)
+        keyboard
+    end
+end
+[h crit_p adj_p]=fdr_bh(all_p);
 
 
-%% Behavioral correlations
-% 
-% bet = stats{1}.B_mean(s_idx);
-% mswitch = stats{1}.switchPct(s_idx);
-% gamble = stats{1}.gamblePct(s_idx);
-% 
-% % Bets
-% [r,p] = corrcoef(bet,q.Pre_BIS_Total(q_idx))
-% [r,p] = corrcoef(bet,q.Pre_CarerBIS_Total(q_idx))
-% [r,p] = corrcoef(bet,q.Pre_LN_HaylingABErrorScore(q_idx))
-% [r,p] = corrcoef(bet,q.Pre_LN_ELF_RuleViolations(q_idx))
-% 
-% 
-% [r,p] = corrcoef(bet,q.Pre_ICD_Total(q_idx))
-% 
-% [r,p] = corrcoef(bet,q.Pre_QUIP_Total(q_idx))
-% 
-
-
-
+y = stats{2}.Signif_Psych';
+[b,dev,logit_stats] =  glmfit(X,y,'binomial','link','logit');
+logit_stats.p
 
 
 

@@ -7,6 +7,7 @@ function [allY] = make_winning_response_variable(subject_type,subject_num,stats)
 % -------------------------------------------------------------------------
 % Author: Saee Paliwal, TNU
 
+idx = find(stats{subject_type}.data{subject_num}.bets>0);
 
 % 1. All bet switches: This is a 1 when you change bets up and 0 when
 % you keep the same bet or switch down
@@ -36,4 +37,6 @@ clear allswitch
 machineSwitch = stats{subject_type}.data{subject_num}.machineSwitches;
 allswitch = nansum([betswitchup machineSwitch gamble cashout],2);
 allswitch = +(allswitch~=0);
-allY{1} = allswitch;
+
+% Pull out relevant trials
+allY{1} = allswitch(idx);
