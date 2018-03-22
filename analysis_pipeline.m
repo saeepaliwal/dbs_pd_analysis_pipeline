@@ -21,6 +21,24 @@ flags.run_cross_val = 0;
 addpath(genpath('./advanced_slot_machine_analysis'));
 addpath(genpath('./tools'));
 
+%% Set analysis flags
+
+% Invert HHGF
+flags.run_hhgf = 0;
+
+% Load questionnaire and anatomical data
+flags.load_q_and_a = 0;
+
+% Print parameters to CSV (for Phil)
+flags.print_parameters_to_csv = 0;
+
+% Post-hoc statistical analyses
+flags.run_behavioral_analysis = 1;
+flags.run_model_analysis  = 1;
+flags.run_regressions = 1;
+flags.run_cross_val = 0;
+
+
 %% Clear workspace and define values
 
 % Main directory
