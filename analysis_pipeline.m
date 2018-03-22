@@ -4,6 +4,24 @@ addpath(genpath('./tools'));
 addpath(genpath('~/Dropbox/Doctorate/tools/spm12'));
 addpath(genpath('~/Dropbox/Doctorate/tools/tapas/'));
 
+%% Set analysis flags
+
+% Invert HHGF
+flags.run_hhgf = 0;
+
+% Load questionnaire and anatomical data
+flags.load_q_and_a = 0;
+
+% Print parameters to CSV (for Phil)
+flags.print_parameters_to_csv = 0;
+
+% Post-hoc statistical analyses
+flags.run_behavioral_analysis = 1;
+flags.run_model_analysis  = 1;
+flags.run_regressions = 1;
+flags.run_cross_val = 0;
+
+
 %% Clear workspace and define values
 
 % Main directory
@@ -41,22 +59,6 @@ STATS_ALL_DATA = [D.RESULTS_DIR 'stats_ALL_DATA.mat'];
 
 PARAMETER_SPREADSHEET = [D.RESULTS_DIR 'DBS_PD_pre_post_parameters.csv'];
 
-%% Set analysis flags
-
-% Invert HHGF
-flags.run_hhgf = 1;
-
-% Load questionnaire and anatomical data
-flags.load_q_and_a = 1;
-
-% Print parameters to CSV (for Phil)
-flags.print_parameters_to_csv = 0;
-
-% Post-hoc statistical analyses
-flags.run_behavioral_analysis = 1;
-flags.run_model_analysis  = 1;
-flags.run_regressions = 1;
-flags.run_cross_val = 0;
 
 %% Run models
 if flags.run_hhgf
@@ -69,6 +71,8 @@ if flags.load_q_and_a
     load(STATS_HHGF);
     stats = load_questionnaires_and_anatomical_data(stats, D);
     save(STATS_ALL_DATA,'stats');
+else
+    load(STATS_ALL_DATA);
 end
 
 %% Print parameters to csv

@@ -12,48 +12,6 @@ for s = 1:2
     end
 end
 
-%% Behavior across timepoints (legacy figure)
-
-quest = {'BIS','QUIP','Apathy','BDI','EQ','Anxiety','UPDRS','LEDD','ELF','Hayling','Discount'};
-timepoints = {'Pre';'FU1';'FU2';'FU3';'FU4'};
-
-% Load time data
-quest_data = {};
-A = {};
-for i = 1:numel(quest)
-    filename = [D.SPREADSHEET_DIR quest{i} '_Timepoints.xlsx'];
-    A.data = xlsread(filename);
-    quest_data.(quest{i}) = A;
-end
-
-% Construct figure
-figure(102)
-for i = 1:numel(quest)
-    
-    subplot(3,4,i)
-    h = boxplot(quest_data.(quest{i}).data, 'Symbol','k.');
-    g = findobj(gca,'Tag','Box');
-    for j = 1:5
-        patch(get(g(j),'XData'),get(g(j),'YData'),[0.7 0.7 0.7]);
-    end
-    set(h,'Color','k','LineStyle','-','LineWidth',1)
-    set(gca,'children',flipud(get(gca,'children')))
-    set(gca,'XTickLabels',{'Pre';'FU1';'FU2';'FU3';'FU4'});
-    
-    for k = 2:5
-        
-        [h p] = ttest(quest_data.(quest{i}).data(:,1),quest_data.(quest{i}).data(:,k));
-        if p<0.05
-            sigstar({{'Pre',timepoints{k}}},p);
-        end
-    end
-
-    title(quest{i});
-end
-
-purty_plot(102,[D.FIGURES_DIR 'behavior_timepoints'],'pdf')
-
-
 %% BIS and BDI
 
 for s = 1:2
