@@ -1,5 +1,5 @@
 function cross_validation(stats,D)
-
+nice_colors
 %% Pre predicting max  change
 
 for t=1:2
@@ -69,7 +69,8 @@ sum(oos_cv)
 %% Plot pretty figure
 
 gray =[0.4 0.4 0.4];
-figure('Position',[50 50 750 650]);
+f = figure(1)
+set(f,'Position',[50 50 750 650]);
 subplot(2,1,1)
 histogram(sum_resid(:,2),80,'EdgeColor','none','LineWidth',0.1);
 ylim = get(gca,'Ylim');
@@ -134,8 +135,6 @@ end
 %% Correlation with ID function
 r = regstats(y_pred',y_true)
 
-y_pred([1 5]) = [];
-y_true([1 5]) = [];
 figure(401)
 clf
 h = scatter(y_true, y_pred,'ko');
@@ -146,8 +145,7 @@ h.MarkerFaceAlpha = 0.7;
 sim_X = [ones(1,36); -15:20]';
 
 corr(y_true',y_pred');
-% sim_y = sum(repmat(r.beta',36,1).*sim_X,2);
-% plot(sim_X(:,2),sim_y,'k','LineWidth',2);
+
 
 plot(sim_X(:,2),0.28*sim_X(:,2)+2,'Color',red,'LineWidth',2)
 yticks([-10 0 10]);
@@ -162,7 +160,7 @@ r = regstats(y_pred',y_true)
 
 figure(406)
 clf
-h = scatter(y, y_pred,'ko');
+h = scatter(y, y_pred','ko');
 hold on
 h.SizeData = 70;
 h.MarkerFaceColor = 'k';

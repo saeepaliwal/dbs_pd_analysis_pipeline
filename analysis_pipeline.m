@@ -16,10 +16,10 @@ flags.load_q_and_a = 0;
 flags.print_parameters_to_csv = 0;
 
 % Post-hoc statistical analyses
-flags.run_behavioral_analysis = 1;
-flags.run_model_analysis  = 1;
-flags.run_regressions = 1;
-flags.run_cross_val = 0;
+flags.run_behavioral_analysis = 0;
+flags.run_model_analysis  = 0;
+flags.run_regressions = 0;
+flags.run_cross_val = 1;
 
 
 %% Clear workspace and define values
@@ -102,6 +102,6 @@ end
 
 %% Run cross-validation
 if flags.run_cross_val
-    cross_validation(stats);
+    cross_validation(stats, D);
 end
 
