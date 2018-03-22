@@ -1,13 +1,30 @@
+function analysis_pipeline()
+
+%% Set analysis flags
+
+% Invert HHGF
+flags.run_hhgf = 0;
+
+% Load questionnaire and anatomical data
+flags.load_q_and_a = 0;
+
+% Print parameters to CSV (for Phil)
+flags.print_parameters_to_csv = 0;
+
+% Post-hoc statistical analyses
+flags.run_behavioral_analysis = 1;
+flags.run_model_analysis  = 1;
+flags.run_regressions = 1;
+flags.run_cross_val = 0;
+
 %% Pull in all paths
 addpath(genpath('./advanced_slot_machine_analysis'));
 addpath(genpath('./tools'));
-addpath(genpath('~/Dropbox/Doctorate/tools/spm12'));
-addpath(genpath('~/Dropbox/Doctorate/tools/tapas/'));
 
 %% Clear workspace and define values
 
 % Main directory
-D.PROJECT_FOLDER = '~/polybox/Projects/DBS_ParkinsonsPatients/';
+D.PROJECT_FOLDER = './';
 
 % Data directories
 D.LIST_OF_SUBJECT_DIRECTORIES = {[D.PROJECT_FOLDER 'PRE_DBS'];...
@@ -41,23 +58,6 @@ STATS_ALL_DATA = [D.RESULTS_DIR 'stats_ALL_DATA.mat'];
 
 PARAMETER_SPREADSHEET = [D.RESULTS_DIR 'DBS_PD_pre_post_parameters.csv'];
 
-%% Set analysis flags
-
-% Invert HHGF
-flags.run_hhgf = 1;
-
-% Load questionnaire and anatomical data
-flags.load_q_and_a = 1;
-
-% Print parameters to CSV (for Phil)
-flags.print_parameters_to_csv = 0;
-
-% Post-hoc statistical analyses
-flags.run_behavioral_analysis = 1;
-flags.run_model_analysis  = 1;
-flags.run_regressions = 1;
-flags.run_cross_val = 0;
-
 %% Run models
 if flags.run_hhgf
     stats = hhgf_analysis(STATS_PRE,STATS_POST, flags);
@@ -69,11 +69,13 @@ if flags.load_q_and_a
     load(STATS_HHGF);
     stats = load_questionnaires_and_anatomical_data(stats, D);
     save(STATS_ALL_DATA,'stats');
+else
+    load(STATS_ALL_DATA);
 end
 
 %% Print parameters to csv
 if flags.print_parameters_to_csv
-    print_parameters_to_csv
+    print_parameters_to_csv();
 end
 
 %% Analyse behavioral data, pre and pos
@@ -100,4 +102,4 @@ end
 if flags.run_cross_val
     cross_validation(stats);
 end
-
+end
