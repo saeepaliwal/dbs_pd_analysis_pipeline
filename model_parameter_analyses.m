@@ -62,6 +62,8 @@ figure(101)
 clf
 hold on
 
+keyboard
+
 bar([stats{1}.FE_grid([1 2]) -1947], ...
     'FaceColor',grey,'EdgeColor','k');
 title('Group-level free energy, pre-DBS');
@@ -76,4 +78,4 @@ ylabel('Free energy')
 purty_plot(101,[D.FIGURES_DIR 'model_comparison'],'tiff')
 
 
-    
+end    
