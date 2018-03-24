@@ -1,8 +1,8 @@
 %% Pull in all paths
 addpath(genpath('./advanced_slot_machine_analysis'));
 addpath(genpath('./tools'));
-addpath(genpath('~/Dropbox/Doctorate/tools/spm12'));
-addpath(genpath('~/Dropbox/Doctorate/tools/tapas/'));
+addpath(genpath('./spm12'));
+addpath(genpath('./tapas/'));
 
 %% Set analysis flags
 
