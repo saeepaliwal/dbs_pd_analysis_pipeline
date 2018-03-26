@@ -2,8 +2,11 @@ function stats = run_all_models_HHGF(stats, subject_type,P)
 % Double HGF on response models
 resp_models = {'tapas_softmax_binary'; 'tapas_softmax_binary_invsig2';'rescorla_wagner'}
 
-for r = 1:length(resp_models)
-    resp_model = resp_models{r};
+%  resp_models = {'rescorla_wagner'};
+  
+for r = 3
+  %1:length(resp_models)
+    resp_model = resp_models{r}
     
     %% Run perceptual variables
     num_subjects = length(stats{subject_type}.labels)
@@ -55,6 +58,8 @@ for r = 1:length(resp_models)
     pars.mc3it = 4;
     
     % Rescorla-Wagner
+    c_rw = tapas_rw_binary_config;
+
     rw.c_prc.n_levels = 3;
     rw.c_obs.obs_fun = str2func(resp_models{1});
     rw.c_obs.transp_obs_fun = str2func(transp_fun);
@@ -62,11 +67,12 @@ for r = 1:length(resp_models)
     rw.c_prc.transp_prc_fun = @tapas_rw_binary_transp;
     rw.c_obs.predorpost = 1;
     
-    rw.c_prc.priormus = c.priormus';
-    rw.c_prc.priorsas = c.priorsas';
+    rw.c_prc.priormus = c_rw.priormus';
+    rw.c_prc.priorsas = c_rw.priorsas';
+    rw.c_prc.priorsas(1) = 0;
+    rw.c_prc.priorsas(2) = 16;
     rw.c_obs.priormus = 1;
     rw.c_obs.priorsas = 0;
-    rw.c_prc.priorsas(hhgf.c_prc.priorsas > 1.0) = 1;
     rw.scale = 0.5;
     
     rw.ign = [];

@@ -2,12 +2,12 @@
 addpath(genpath('./advanced_slot_machine_analysis'));
 addpath(genpath('./tools'));
 addpath(genpath('./spm12'));
-addpath(genpath('./tapas/'));
+addpath(genpath('./dbs_tapas/'));
 
 %% Set analysis flags
 
 % Invert HHGF
-flags.run_hhgf = 0;
+flags.run_hhgf = 1;
 
 % Load questionnaire and anatomical data
 flags.load_q_and_a = 0;
@@ -19,13 +19,13 @@ flags.print_parameters_to_csv = 0;
 flags.run_behavioral_analysis = 0;
 flags.run_model_analysis  = 0;
 flags.run_regressions = 0;
-flags.run_cross_val = 1;
+flags.run_cross_val = 0;
 
 
 %% Clear workspace and define values
 
 % Main directory
-D.PROJECT_FOLDER = '~/polybox/Projects/DBS_ParkinsonsPatients/';
+D.PROJECT_FOLDER = '../';
 
 % Data directories
 D.LIST_OF_SUBJECT_DIRECTORIES = {[D.PROJECT_FOLDER 'PRE_DBS'];...
@@ -33,7 +33,7 @@ D.LIST_OF_SUBJECT_DIRECTORIES = {[D.PROJECT_FOLDER 'PRE_DBS'];...
 D.SPREADSHEET_DIR = [D.PROJECT_FOLDER 'data_spreadsheets/'];
 
 % Results directories
-D.RESULTS_DIR = [D.PROJECT_FOLDER 'eduardo_rerun/'];
+D.RESULTS_DIR = [D.PROJECT_FOLDER 'saee_rerun/'];
 D.FIGURES_DIR = [D.RESULTS_DIR 'figures/'];
 D.REGRESSION_DIR = [D.RESULTS_DIR 'regressions/'];
 
