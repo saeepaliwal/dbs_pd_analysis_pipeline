@@ -1,7 +1,7 @@
 function model_result_analyses(stats, D)
 
 %% T Test on pre and post model parameters
-display_figure = 1;
+display_figure = 0;
 if display_figure
     [h_omega, p_omega] = ttest(log(stats{1}.omega),log(stats{2}.omega));
     [h_theta, p_theta] = ttest(log(stats{1}.theta),log(stats{2}.theta));
@@ -76,4 +76,4 @@ ylabel('Free energy')
 purty_plot(101,[D.FIGURES_DIR 'model_comparison'],'tiff')
 
 
-    
+end    

@@ -10,7 +10,7 @@ function startup()
 % copyright (C) 2018
 %
 
-addpath('~/software/spm12')
+addpath('~/maintenance/spm12')
 
 home = pwd;
 cd('./tapas/tapas/')

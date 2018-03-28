@@ -12,9 +12,9 @@ flags.load_q_and_a = 0;
 flags.print_parameters_to_csv = 0;
 
 % Post-hoc statistical analyses
-flags.run_behavioral_analysis = 1;
+flags.run_behavioral_analysis = 0;
 flags.run_model_analysis  = 1;
-flags.run_regressions = 1;
+flags.run_regressions = 0;
 flags.run_cross_val = 0;
 
 %% Pull in all paths

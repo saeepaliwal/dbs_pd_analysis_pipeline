@@ -1,4 +1,3 @@
-
 %% Pull in the game trace of the slot machine
 load game_trace.mat
 
@@ -39,7 +38,7 @@ for iSub = subject_type
     P = game_trace(1:length(stats{iSub}.data{1}.performance));
     stats = run_all_models_HHGF(stats, iSub,P)    
 end
-save(STATS_STRUCT,'stats');
+%save(STATS_STRUCT,'stats');
 
 
 %% Step 3: Collect all model info
@@ -54,7 +53,7 @@ for iSub = subject_type
     stats{iSub}.theta_all = theta_all;
     stats{iSub}.beta_all = beta_all;
 end
-save(STATS_STRUCT,'stats');
+%save(STATS_STRUCT,'stats');
 
 
 %% Step 4: Run model comparison
@@ -72,5 +71,4 @@ for  iSub = subject_type
         stats{iSub}.(param) = stats{iSub}.(param_all)(:,idx);
     end
 end
-save(STATS_STRUCT,'stats');
-
+%save(STATS_STRUCT,'stats');
