@@ -92,7 +92,7 @@ for f = 1:length(fields)
     r.y = y;
     r.X = X;
     all_p(f) = r.fstat.pval;
-    reg_vals(r,stage,fields{f});
+    reg_vals(r,stage,['Change in ' fields{f}]);
 
 end
 [h crit_p adj_p]=fdr_bh(all_p);

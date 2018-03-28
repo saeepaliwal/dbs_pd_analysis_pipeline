@@ -17,10 +17,6 @@ flags.run_model_analysis  = 1;
 flags.run_regressions = 0;
 flags.run_cross_val = 0;
 
-%% Pull in all paths
-addpath(genpath('./advanced_slot_machine_analysis'));
-addpath(genpath('./tools'));
-
 %% Clear workspace and define values
 
 % Main directory
@@ -47,7 +43,7 @@ for iDir = 1:numel(results_dirs)
 end
 
 %% Names of output stats strucutures
-% N.B. stats is structured as follows: 
+% N.B. stats is structured as follows:
 %    stats{1} holds pre-dbs data
 %    stats{2} hold post-dbs data
 
@@ -67,10 +63,12 @@ end
 %% Load questionnaire and anatomical data
 if flags.load_q_and_a
     load(STATS_HHGF);
+    % Cell array with first and second measurements
     stats = load_questionnaires_and_anatomical_data(stats, D);
-    save(STATS_ALL_DATA,'stats');
+    save(STATS_ALL_DATA, 'stats');
 else
-    load(STATS_ALL_DATA);
+    stats = load(STATS_ALL_DATA);
+    stats = stats.stats;
 end
 
 %% Print parameters to csv
@@ -79,27 +77,35 @@ if flags.print_parameters_to_csv
 end
 
 %% Analyse behavioral data, pre and pos
+% Supplementary table 3
 if flags.run_behavioral_analysis
-    behavioral_data_analyses(stats, D)
+    behavioral_data_analyses(stats, D) % DONE
+end
+
+if flags.run_behavioral_regressions
+    %% Run regressions on behavioral data
+    % Supplementary table 4, 5, 6 & table 3
+    behavioral_regressions(stats);
 end
 
 %% Analyze model results, pre and post
+% Figure 4
 if flags.run_model_analysis
     model_parameter_analyses(stats, D)
 end
 
 %% Run regressions on winning model from paper
 if flags.run_regressions
-    
-    %% Run regressions on behavioral data    
-    behavioral_regressions(stats);
-  
-    %% Run regressions on model parameters     
+
+
+    %% Run regressions on model parameters
+    % Table 5 & Supplementary tables 7 & 8
     parameter_regressions(stats);
 end
 
 %% Run cross-validation
 if flags.run_cross_val
+    % Figure 5
     cross_validation(stats);
 end
 end

@@ -1,16 +1,21 @@
-function behavioral_regressions(stats)
+function behavioral_regressions(stats, fp)
+
+n = 1;
+n = n + 1;
+if nargin < n
+    fp = 1;
+end
 
 %% Define fields of interest
 fields = {'BIS' ,'BIS_NonPlanning','BIS_Motor','BIS_Attentional'};
-%fields = {'QUIP'};
 
 %% Pull out behavioral data
 
 for s = 1:2
-    data.bets(:,s) = stats{s}.bets;
-    data.machine_switches(:,s) = stats{s}.machine_switches
-    data.gamble(:,s) = stats{s}.gamble;
-    data.cashout(:,s) = stats{s}.cashout;
+    data.bets(:, s) = stats{s}.bets;
+    data.machine_switches(:, s) = stats{s}.machine_switches;
+    data.gamble(:, s) = stats{s}.gamble;
+    data.cashout(:, s) = stats{s}.cashout;
 end
 
 
@@ -22,48 +27,37 @@ for d = 1:length(data_fields)
         data.(data_fields{d})(:,1);
 end
 
-%% BIS and BDI regression
-for i = 1:2
-    [rho(i) p(i)]= corr(stats{i}.BIS', stats{i}.BDI');
-end
 [r2 p2] = corr(stats{2}.BIS'-stats{1}.BIS', stats{2}.BDI'-stats{1}.BDI');
 
 %% Run behavioral regressions, pre and post
-depvar = {'Bets';'Machine Switches';'Gamble'};
 for s = 1:2
     if s == 1
-        fprintf('\n%s\n\n\n',['PRE-DBS regressions']);
+        fprintf(1, '\n%s\n\n\n', 'PRE-DBS regressions');
     else
-        fprintf('\n%s\n\n\n',['POST-DBS regressions']);
+        fprintf(1, '\n%s\n\n\n', 'POST-DBS regressions');
     end
 
     % Behavioral regressions
     for f = 1:length(fields)
         
-        if strcmp(fields{f},'QUIP')
-            X = [data.bets(:,s) data.machine_switches(:,s)...
-                data.gamble(:,s) stats{1}.LEDD'];
-        else
-            X = [data.bets(:,s) data.machine_switches(:,s)...
-                data.gamble(:,s) stats{s}.BDI'];
-        end
+        X = [data.bets(:, s) data.machine_switches(:, s)...
+                data.gamble(:, s) stats{s}.BDI'];
         
         y = stats{s}.(fields{f})';
-        r = regstats(y,X,'linear');
+        r = regstats(y, X, 'linear');
         r.y = y;
         r.X = X;
         if s == 1
             title = 'Behav PRE-DBS';
-
         else
             title = 'Behav POST-DBS';
         end
-        
-        all_p_f(f,s) = r.fstat.pval;
+
         all_p_t(f,:) = r.tstat.pval(2:end-1)';
         
-        reg_vals(r,title,fields{f});
-       if any(r.cookd>1)
+        reg_vals(r, title, fields{f});
+        keyboard 
+        if any(r.cookd>1)
             keyboard
         end
         if contains(fields{f},'Max')
@@ -76,6 +70,7 @@ for s = 1:2
     
     post_hoc_t = reshape(all_p_t',12,1);
     [corr_t] = bonf_holm(post_hoc_t);
+
 end
 
 
@@ -140,8 +135,4 @@ end
 y = stats{2}.Signif_Psych';
 [b,dev,logit_stats] =  glmfit(X,y,'binomial','link','logit');
 logit_stats.p
-
-
-
-
-
+end

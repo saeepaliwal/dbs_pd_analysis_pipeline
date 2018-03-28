@@ -62,6 +62,8 @@ figure(101)
 clf
 hold on
 
+keyboard
+
 bar([stats{1}.FE_grid([1 2]) -1947], ...
     'FaceColor',grey,'EdgeColor','k');
 title('Group-level free energy, pre-DBS');
