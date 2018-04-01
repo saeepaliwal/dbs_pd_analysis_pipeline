@@ -1,4 +1,5 @@
 function model_result_analyses(stats, D)
+% Calculates the reuslts shown in Table 4 and prints Figure 3
 
 %% T Test on pre and post model parameters
 display_figure = 1;

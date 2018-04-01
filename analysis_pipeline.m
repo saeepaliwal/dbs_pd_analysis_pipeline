@@ -16,16 +16,14 @@ flags.load_q_and_a = 0;
 flags.print_parameters_to_csv = 0;
 
 % Post-hoc statistical analyses
-flags.run_behavioral_analysis = 0;
-flags.run_model_analysis  = 0;
-flags.run_regressions = 0;
+flags.run_figures_tables = 1;
 flags.run_cross_val = 0;
 
 
 %% Clear workspace and define values
 
 % Main directory
-D.PROJECT_FOLDER = '../';
+D.PROJECT_FOLDER = '~/polybox/Projects/DBS_ParkinsonsPatients/results/';
 
 % Data directories
 D.LIST_OF_SUBJECT_DIRECTORIES = {[D.PROJECT_FOLDER 'PRE_DBS'];...
@@ -33,7 +31,7 @@ D.LIST_OF_SUBJECT_DIRECTORIES = {[D.PROJECT_FOLDER 'PRE_DBS'];...
 D.SPREADSHEET_DIR = [D.PROJECT_FOLDER 'data_spreadsheets/'];
 
 % Results directories
-D.RESULTS_DIR = [D.PROJECT_FOLDER 'saee_rerun/'];
+D.RESULTS_DIR = [D.PROJECT_FOLDER 'FinalStats/'];
 D.FIGURES_DIR = [D.RESULTS_DIR 'figures/'];
 D.REGRESSION_DIR = [D.RESULTS_DIR 'regressions/'];
 
@@ -85,23 +83,31 @@ if flags.run_behavioral_analysis
     behavioral_data_analyses(stats, D)
 end
 
-%% Analyze model results, pre and post
-if flags.run_model_analysis
-    model_parameter_analyses(stats, D)
+
+%% BIS and BDI correlation, pre and post
+for i = 1:2
+    [rho(i) p(i)]= corr(stats{i}.BIS', stats{i}.BDI');
 end
 
 %% Run regressions on winning model from paper
-if flags.run_regressions
+if flags.run_figures_tables
     
-    %% Run regressions on behavioral data    
+    
+    %% Table 3: Run regressions on behavioral data    
     behavioral_regressions(stats);
+    
+    %% Table 4 and Figure 3: Model comparison and winning model parameters,
+    % Pre and Post DBS
+    model_parameter_analyses(stats, D)
   
-    %% Run regressions on model parameters     
+    %% Table 5: Regressions of BIS on model parameters     
     parameter_regressions(stats);
 end
 
 %% Run cross-validation
-if flags.run_cross_val
+if flags.run_cross_validation
+    
+    %% Runs and prints Figure 5 
     cross_validation(stats, D);
 end
 

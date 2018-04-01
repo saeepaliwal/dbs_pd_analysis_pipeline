@@ -2,7 +2,6 @@ function behavioral_regressions(stats)
 
 %% Define fields of interest
 fields = {'BIS' ,'BIS_NonPlanning','BIS_Motor','BIS_Attentional'};
-%fields = {'QUIP'};
 
 %% Pull out behavioral data
 
@@ -22,11 +21,7 @@ for d = 1:length(data_fields)
         data.(data_fields{d})(:,1);
 end
 
-%% BIS and BDI regression
-for i = 1:2
-    [rho(i) p(i)]= corr(stats{i}.BIS', stats{i}.BDI');
-end
-[r2 p2] = corr(stats{2}.BIS'-stats{1}.BIS', stats{2}.BDI'-stats{1}.BDI');
+
 
 %% Run behavioral regressions, pre and post
 depvar = {'Bets';'Machine Switches';'Gamble'};

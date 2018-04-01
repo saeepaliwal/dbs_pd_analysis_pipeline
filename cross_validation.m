@@ -1,4 +1,4 @@
-function cross_validation(stats,D)
+%function cross_validation(stats,D)
 nice_colors
 %% Pre predicting max  change
 
@@ -9,8 +9,8 @@ for t=1:2
     
     for i = 1:100000
         residuals = [];
-        if t ==1
-            X(:, 2) = X(randperm(38), 3);
+        if t == 1
+            X(:, 2) = X(randperm(38), 2);
         elseif t == 2
             y = y(randperm(38));
         end
@@ -65,15 +65,24 @@ for i = 1:38
 end
 sum(oos_cv)
 
+%% Get p-values of distributions
+for iRun = 1:2
+    p_val(iRun) = 1- sum(sum(oos_cv) < sum_resid(:,iRun))./...
+        size(sum_resid(:,iRun),1);
+end
+   
+keyboard
 
-%% Plot pretty figure
+
+%% Plot figure
 
 gray =[0.4 0.4 0.4];
 f = figure(1)
 set(f,'Position',[50 50 750 650]);
 subplot(2,1,1)
 histogram(sum_resid(:,2),80,'EdgeColor','none','LineWidth',0.1);
-ylim = get(gca,'Ylim');
+ylim([0 8000]);
+xlim([1000 2500]);
 hold on
 
 patch_coords = [quantile(sum_resid(:,2),0.05) quantile(sum_resid(:,2),0.95) ...
@@ -93,17 +102,18 @@ pval_full_model = P1(idx1);
 subplot(2,1,2)
 histogram(sum_resid(:,1),80,'EdgeColor','none','LineWidth',0.1);
 hold on
-ylim = get(gca,'Ylim');
-
+%ylim = get(gca,'Ylim');
+ylim([0 16000])
 patch_coords = [quantile(sum_resid(:,1),0.05) quantile(sum_resid(:,1),0.95) ...
     quantile(sum_resid(:,1),0.95) quantile(sum_resid(:,1),0.05)];
 
-patch(patch_coords, [0 0 12000 12000], 'b','FaceAlpha',0.15,'EdgeColor','none')
+patch(patch_coords, [0 0 16000 16000], 'b','FaceAlpha',0.15,'EdgeColor','none')
 
-plot(repmat(sum(oos_cv),12000,1),[1:12000],'Color','r','LineWidth',2)
+plot(repmat(sum(oos_cv),16000,1),[1:16000],'Color','r','LineWidth',2)
 xlabel('Sum squared error')
 ylabel('No. Samples')
 title('Cross validation, \vartheta');
+xlim([1000 2500]);
 purty_plot(1,[D.FIGURES_DIR 'cross_validation_histogram'],'tiff')
 
 
