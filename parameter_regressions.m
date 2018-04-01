@@ -88,8 +88,9 @@ end
 [h crit_p adj_p]=fdr_bh(all_p);
 
 %% Pre predicting max  change
-fprintf(fp, '\n%s\n\n','PRE-DBS predicting max diff');
+fprintf('\n%s\n\n','PRE-DBS predicting max diff');
 depvar = {'omega';'theta';'beta'};
+fields = {'BIS_MaxIncrease'};
 X = [log(stats{1}.omega) log(stats{1}.theta) stats{1}.BDI']; 
 stage = 'Param Pre';
 for f = 1:length(fields)
