@@ -1,11 +1,13 @@
-function stats = run_all_models_HHGF(stats, subject_type,P)
+function stats = run_all_models_HHGF(stats, subject_type, P)
 % Double HGF on response models
-resp_models = {'tapas_softmax_binary'; 'tapas_softmax_binary_invsig2';'rescorla_wagner'}
 
-%  resp_models = {'rescorla_wagner'};
+resp_models = {
+    'tapas_softmax_binary';
+    'tapas_softmax_binary_invsig2';
+    'rescorla_wagner'};
+
   
-for r = 3
-  %1:length(resp_models)
+for r = 1:length(resp_models)
     resp_model = resp_models{r}
     
     %% Run perceptual variables
@@ -21,9 +23,8 @@ for r = 3
         subjects(i,1).ign = [];
         subjects(i,1).irr = [];
     end
-    
+
     transp_fun = [resp_model '_transp'];
-    
     % HGF
     hhgf.c_prc.n_levels = 3;
     hhgf.c_obs.obs_fun = str2func(resp_model);
@@ -51,10 +52,10 @@ for r = 3
     inference = struct();
     pars = struct();
     
-    pars.ndiag = 1000;
-    pars.niter = 4000;
-    pars.nburndin = 4000;
-    pars.T = ones(num_subjects, 1) * linspace(0.01, 1, 32).^5;
+    pars.ndiag = 200;
+    pars.niter = 2000;
+    pars.nburnin = 2000;
+    pars.T = ones(num_subjects, 1) * linspace(0.01, 1, 2).^5;
     pars.mc3it = 4;
     
     % Rescorla-Wagner
@@ -66,25 +67,28 @@ for r = 3
     rw.c_prc.prc_fun = @tapas_rw_binary;
     rw.c_prc.transp_prc_fun = @tapas_rw_binary_transp;
     rw.c_obs.predorpost = 1;
-    
+
     rw.c_prc.priormus = c_rw.priormus';
     rw.c_prc.priorsas = c_rw.priorsas';
     rw.c_prc.priorsas(1) = 0;
     rw.c_prc.priorsas(2) = 16;
     rw.c_obs.priormus = 1;
     rw.c_obs.priorsas = 0;
+
     rw.scale = 0.5;
     
     rw.ign = [];
     rw.irr = [];
-    
     if strcmp(resp_model,'tapas_softmax_binary') || strcmp(resp_model,'tapas_softmax_binary_invsig2')
-        stats{subject_type}.hhgf_est{r} = tapas_h2gf_estimate(subjects, hhgf, inference, pars);
+        estimate = tapas_h2gf_estimate(subjects, hhgf, inference, pars);
+        stats{subject_type}.hhgf_est{r} = estimate;
     elseif strcmp(resp_model,'rescorla_wagner')
-        stats{subject_type}.rw_est = tapas_h2gf_estimate(subjects, rw, inference, pars);
-    end
-    
+        estimate = tapas_h2gf_estimate(subjects, rw, inference, pars);
+        stats{subject_type}.rw_est = estimate;
+    end 
+    fprintf(1, '%s - Fe=%0.2f\n', resp_model, estimate.fe);
 end
 
 stats{subject_type}.response_models = resp_models;
 
+end
