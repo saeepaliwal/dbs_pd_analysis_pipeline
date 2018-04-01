@@ -36,15 +36,14 @@ for iSub = subject_type
         stats{iSub} = rmfield(stats{iSub},'rw');
     end
     P = game_trace(1:length(stats{iSub}.data{1}.performance));
-    stats = run_all_models_HHGF(stats, iSub,P)    
+    stats = run_all_models_HHGF(stats, iSub, P); 
 end
-%save(STATS_STRUCT,'stats');
-
+save(STATS_STRUCT,'stats');
 
 %% Step 3: Collect all model info
-
 for iSub = subject_type
-    [FE_HH,FE_RW,llh_all,kappa_all,omega_all,theta_all,beta_all] = collect_model_info_TI(iSub, stats);
+    [FE_HH, FE_RW, llh_all, kappa_all, omega_all, theta_all, beta_all] = ...
+        collect_model_info_TI(iSub, stats);
     
     stats{iSub}.FE_grid = [FE_HH FE_RW];
     stats{iSub}.llh = llh_all;
@@ -71,4 +70,5 @@ for  iSub = subject_type
         stats{iSub}.(param) = stats{iSub}.(param_all)(:,idx);
     end
 end
-%save(STATS_STRUCT,'stats');
+save(STATS_STRUCT,'stats');
+

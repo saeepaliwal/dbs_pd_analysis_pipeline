@@ -13,9 +13,11 @@ flags.print_parameters_to_csv = 0;
 
 % Post-hoc statistical analyses
 flags.run_behavioral_analysis = 0;
-flags.run_model_analysis  = 1;
+flags.run_behavioral_regressions = 0;
+flags.run_model_analysis  = 0;
 flags.run_regressions = 0;
-flags.run_cross_val = 0;
+flags.load_original = 1;
+flags.run_cross_val = 1;
 
 %% Clear workspace and define values
 
@@ -33,8 +35,7 @@ D.FIGURES_DIR = [D.RESULTS_DIR 'figures/'];
 D.REGRESSION_DIR = [D.RESULTS_DIR 'regressions/'];
 
 % Create any necessary directories
-results_dirs = {'RESULTS_DIR';...
-    'FIGURES_DIR';'REGRESSION_DIR'};
+results_dirs = {'RESULTS_DIR'; 'FIGURES_DIR'; 'REGRESSION_DIR'};
 for iDir = 1:numel(results_dirs)
     results_dir = results_dirs{iDir};
     if ~exist(D.(results_dir),'dir')
@@ -51,24 +52,21 @@ STATS_PRE = [D.RESULTS_DIR 'stats_PRE_DBS.mat'];
 STATS_POST = [D.RESULTS_DIR 'stats_POST_DBS.mat'];
 STATS_HHGF = [D.RESULTS_DIR 'stats_HHGF.mat'];
 STATS_ALL_DATA = [D.RESULTS_DIR 'stats_ALL_DATA.mat'];
+%STATS_HHGF = STATS_ALL_DATA;
 
 PARAMETER_SPREADSHEET = [D.RESULTS_DIR 'DBS_PD_pre_post_parameters.csv'];
 
 %% Run models
 if flags.run_hhgf
-    stats = hhgf_analysis(STATS_PRE,STATS_POST, flags);
-    save(STATS_HHGF,'stats');
-end
-
-%% Load questionnaire and anatomical data
-if flags.load_q_and_a
-    load(STATS_HHGF);
-    % Cell array with first and second measurements
-    stats = load_questionnaires_and_anatomical_data(stats, D);
-    save(STATS_ALL_DATA, 'stats');
+    stats = hhgf_analysis(STATS_PRE, STATS_POST, flags);
 else
-    stats = load(STATS_ALL_DATA);
-    stats = stats.stats;
+    if flags.load_original
+        stats = load('eduardo_rerun/stats_ALL_DATA.mat');
+        stats = stats.stats;
+    else
+        stats = load('verification/eduardo_rerun/stats_ALL_DATA.mat');
+        stats = stats.stats; 
+    end
 end
 
 %% Print parameters to csv
@@ -96,8 +94,6 @@ end
 
 %% Run regressions on winning model from paper
 if flags.run_regressions
-
-
     %% Run regressions on model parameters
     % Table 5 & Supplementary tables 7 & 8
     parameter_regressions(stats);
@@ -108,4 +104,5 @@ if flags.run_cross_val
     % Figure 5
     cross_validation(stats);
 end
+
 end

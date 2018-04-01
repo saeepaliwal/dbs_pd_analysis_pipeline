@@ -1,4 +1,4 @@
-function stats = run_all_models_HHGF(stats, subject_type,P)
+function stats = run_all_models_HHGF(stats, subject_type, P)
 % Double HGF on response models
 
 resp_models = {
@@ -52,9 +52,9 @@ for r = 1:length(resp_models)
     pars = struct();
     
     pars.ndiag = 200;
-    pars.niter = 1000;
-    pars.nburnin = 1000;
-    pars.T = ones(num_subjects, 1) * linspace(0.01, 1, 10).^5;
+    pars.niter = 2000;
+    pars.nburnin = 2000;
+    pars.T = ones(num_subjects, 1) * linspace(0.01, 1, 2).^5;
     pars.mc3it = 4;
     
     % Rescorla-Wagner

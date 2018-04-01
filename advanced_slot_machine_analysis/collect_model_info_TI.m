@@ -42,3 +42,5 @@ if isfield(stats{subject_type},'rw_est')
 else
     FE_RW = [];
 end
+
+end
