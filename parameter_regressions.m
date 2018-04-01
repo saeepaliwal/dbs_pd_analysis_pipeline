@@ -9,9 +9,9 @@ fields = {'BIS', 'BIS_Attentional', 'BIS_Motor', 'BIS_NonPlanning'};
 %% Run behavioral regressions, pre and post
 for s = 1:2
     if s == 1
-        fprintf(fp, '\n%s\n\n\n',['PRE-DBS regressions']);
+        fprintf('\n%s\n\n\n',['PRE-DBS regressions']);
     else
-        fprintf(fp, '\n%s\n\n\n',['POST-DBS regressions']);
+        fprintf('\n%s\n\n\n',['POST-DBS regressions']);
     end
    
     % Behavioral regressions
@@ -45,47 +45,6 @@ for s = 1:2
         end
     end
 end
-
-
-
-%% Pre predicting max BIS increase
-fields = {'BIS_MaxIncrease'}; 
-fprintf('\n%s\n\n','Table 5: PRE-DBS predicting max diff');
-
-%% Run behavioral regressions, change predicting change
-fields = {'BIS'};
-X = [omega_diff theta_diff];
-
-stage = ' Param Diff';
-fprintf(fp, '\n%s\n\n','Parameter differences and questionnaire differences');
-for f = 1:length(fields)
-    y = longitudinal.(fields{f});
-    r = regstats(y,X,'linear');
-    r.y = y;
-    r.X = X;
-    all_p(f) = r.fstat.pval;
-    reg_vals(r,stage,fields{f});
-end
-
-[h crit_p adj_p]=fdr_bh(all_p);
-clear all_p
-
-
-%% Pre predicting change
-fprintf(fp, '\n%s\n\n','PRE-DBS predicting differences');
-depvar = {'omega';'theta';'beta'};
-X = [log(stats{1}.omega) log(stats{1}.theta) stats{1}.BDI']; 
-stage = 'Param Pre';
-for f = 1:length(fields)
-    y = longitudinal.(fields{f});
-    r = regstats(y,X,'linear');
-    r.y = y;
-    r.X = X;
-    all_p(f) = r.fstat.pval;
-    reg_vals(r,stage,['Change in ' fields{f}]);
-
-end
-[h crit_p adj_p]=fdr_bh(all_p);
 
 %% Pre predicting max  change
 fprintf('\n%s\n\n','PRE-DBS predicting max diff');
