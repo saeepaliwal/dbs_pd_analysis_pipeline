@@ -90,6 +90,7 @@ for i = 1:2
         quantile(sum_resid(:, i), 1.0 - 0.9), ...
         quantile(sum_resid(:, i), 1.0 - 0.95), ...
         quantile(sum_resid(:, i), 1.0 - 0.99));
+     keyboard
 end
 
 if plot_flag

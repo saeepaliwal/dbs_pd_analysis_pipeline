@@ -1,7 +1,5 @@
-function parameter_regressions(stats)
+function parameter_regressions(stats, fp)
 %% Parameter differences
-
-fp = 1;
 
 omega_diff = log(stats{2}.omega) - log(stats{1}.omega); 
 theta_diff = log(stats{2}.theta) - log(stats{1}.theta);
@@ -25,14 +23,14 @@ end
 keyboard
 
 %% Define fields of interest
-fields = {'BIS'}
+fields = {'BIS', 'BIS_Attentional', 'BIS_Motor', 'BIS_NonPlanning'};
 
 %% Run behavioral regressions, pre and post
 for s = 1:2
     if s == 1
-        fprintf('\n%s\n\n\n',['PRE-DBS regressions']);
+        fprintf(fp, '\n%s\n\n\n',['PRE-DBS regressions']);
     else
-        fprintf('\n%s\n\n\n',['POST-DBS regressions']);
+        fprintf(fp, '\n%s\n\n\n',['POST-DBS regressions']);
     end
    
     % Behavioral regressions
@@ -58,9 +56,6 @@ for s = 1:2
         all_p_t(f,:) = r.tstat.pval(2:3);
         reg_vals(r,stage,fields{f});
         keyboard
-%         if any(r.cookd > 1)
-%             keyboard
-%         end
 
         if contains(fields{f}, 'Max')
             longitudinal.(fields{f}) = stats{2}.(fields{f});
@@ -80,7 +75,7 @@ fields = {'BIS'};
 X = [omega_diff theta_diff];
 
 stage = ' Param Diff';
-fprintf('\n%s\n\n','Parameter differences and questionnaire differences');
+fprintf(fp, '\n%s\n\n','Parameter differences and questionnaire differences');
 for f = 1:length(fields)
     y = longitudinal.(fields{f});
     r = regstats(y,X,'linear');
@@ -95,7 +90,7 @@ clear all_p
 
 
 %% Pre predicting change
-fprintf('\n%s\n\n','PRE-DBS predicting differences');
+fprintf(fp, '\n%s\n\n','PRE-DBS predicting differences');
 depvar = {'omega';'theta';'beta'};
 X = [log(stats{1}.omega) log(stats{1}.theta) stats{1}.BDI']; 
 stage = 'Param Pre';
@@ -111,7 +106,7 @@ end
 [h crit_p adj_p]=fdr_bh(all_p);
 
 %% Pre predicting max  change
-fprintf('\n%s\n\n','PRE-DBS predicting max diff');
+fprintf(fp, '\n%s\n\n','PRE-DBS predicting max diff');
 depvar = {'omega';'theta';'beta'};
 X = [log(stats{1}.omega) log(stats{1}.theta) stats{1}.BDI']; 
 fields = {'BIS_MaxIncrease'}; 
@@ -127,7 +122,7 @@ end
 [h crit_p adj_p] = fdr_bh(all_p);
 
 %% Pre predicting max  change
-fprintf('\n%s\n\n','PRE-DBS predicting max diff only BDI');
+fprintf(fp, '\n%s\n\n','PRE-DBS predicting max diff only BDI');
 depvar = {'omega';'theta';'beta'};
 X = [stats{1}.BDI']; 
 fields = {'BIS_MaxIncrease'}; 

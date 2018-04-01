@@ -1,6 +1,7 @@
 function analysis_pipeline()
-
 %% Set analysis flags
+
+fp = 1;
 
 % Invert HHGF
 flags.run_hhgf = 0;
@@ -15,9 +16,9 @@ flags.print_parameters_to_csv = 0;
 flags.run_behavioral_analysis = 0;
 flags.run_behavioral_regressions = 0;
 flags.run_model_analysis  = 0;
-flags.run_regressions = 0;
-flags.load_original = 1;
-flags.run_cross_val = 1;
+flags.run_regressions = 1;
+flags.load_original = 0;
+flags.run_cross_val = 0;
 
 %% Clear workspace and define values
 
@@ -56,16 +57,21 @@ STATS_ALL_DATA = [D.RESULTS_DIR 'stats_ALL_DATA.mat'];
 
 PARAMETER_SPREADSHEET = [D.RESULTS_DIR 'DBS_PD_pre_post_parameters.csv'];
 
-%% Run models
-if flags.run_hhgf
-    stats = hhgf_analysis(STATS_PRE, STATS_POST, flags);
+if flags.load_original
+    stats = load('eduardo_rerun/stats_ALL_DATA.mat');
+    stats = stats.stats;
 else
-    if flags.load_original
-        stats = load('eduardo_rerun/stats_ALL_DATA.mat');
-        stats = stats.stats;
+    %% Run models
+    if flags.run_hhgf
+        stats = hhgf_analysis(STATS_PRE, STATS_POST, flags);
     else
         stats = load('verification/eduardo_rerun/stats_ALL_DATA.mat');
         stats = stats.stats; 
+    end
+    behavioral_stats = load('data/stats_behavioral.mat');
+    behavioral_stats = behavioral_stats.stats;
+    for i = 1:2
+        stats{i} = copy_fields(stats{i}, behavioral_stats{i});
     end
 end
 
@@ -96,7 +102,7 @@ end
 if flags.run_regressions
     %% Run regressions on model parameters
     % Table 5 & Supplementary tables 7 & 8
-    parameter_regressions(stats);
+    parameter_regressions(stats, fp);
 end
 
 %% Run cross-validation
