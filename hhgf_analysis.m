@@ -1,11 +1,10 @@
-function stats = hhgf_analysis(STATS_PRE, STATS_POST, flags)
+function stats = hhgf_analysis(STATS_PRE, STATS_POST)
 %% Pre DBS
-
-% Specify paths for data saving
-target_dir = 'verification';
 
 % Run analyses
 [pre_stats] = wrapper(STATS_PRE, target_dir);
+
+%% Post DBS
 
 % Run analyses
 [post_stats] = wrapper(STATS_POST, target_dir);
@@ -21,8 +20,6 @@ end
 
 stats{1} = pre_stats{1};
 stats{2} = post_stats{1};
-
-save(fullfile(target_dir, 'eduardo_rerun', 'stats_ALL_DATA.mat'));
 
 end
 
@@ -74,4 +71,4 @@ end
 
 save(fullfile(dtarget, STATS_STRUCT), 'stats');
 
-end
+

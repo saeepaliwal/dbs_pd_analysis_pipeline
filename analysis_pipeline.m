@@ -10,7 +10,7 @@ addpath(genpath('./dbs_tapas/'));
 fp = 1;
 
 % Invert HHGF
-flags.run_hhgf = 0;
+flags.run_hhgf = 1;
 
 % Load questionnaire and anatomical data
 flags.load_q_and_a = 1;
