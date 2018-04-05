@@ -1,123 +1,76 @@
-function behavioral_data_analyses(stats, D)
+function behavioral_data_analyses(stats)
 
-%% Correlation of BIS and task impulsivity
-for s = 1:2
-    f1 = {'HaylingA';'HaylingABError';'ELF';'Discount'};
-    f2 = {'BIS_NonPlanning','BIS_Motor','BIS_Attentional'};
-    
-    for i = 1:4
-        for j = 1:3
-            [r(i,j,s) p(i,j,s)] = corr(stats{s}.(f1{i})', stats{s}.(f2{j})');
+%% Correlation BIS and BDI
+for i = 1:2
+    [rho(i) p_0(i)]= corr(stats{i}.BIS', stats{i}.BDI');
+    if i == 1
+        fprintf('Pre DBS Corr, BIS and BDI: %0.2f (p=%0.3f)',rho(i),p_0(i));
+    else
+        fprintf('Post DBS Corr, BIS and BDI: %0.2f (p=%0.3f)',rho(i),p_0(i));
+    end
+end
+
+%% Correlation, QUIP and LEDD
+for i = 1:2
+    [rho(i) p_0(i)]= corr(stats{i}.QUIP', stats{i}.LEDD');
+    if i == 1
+        fprintf('Pre DBS Corr, QUIP and LEDD: %0.2f (p=%0.3f)',rho(i),p_0(i));
+    else
+        fprintf('Post DBS Corr, QUIP and LEDD: %0.2f (p=%0.3f)',rho(i),p_0(i));
+    end
+end
+
+%% Correlation, other measures of impulsivity and LEDD
+fields = {'ELF','HaylingABError','Discount'};
+for f = 1:numel(fields)
+    for i = 1:2
+        [rho(i) p_0(i)]= corr(stats{i}.(fields{f})', stats{i}.LEDD');
+        if i == 1
+            fprintf('Pre DBS Corr, %s and LEDD: %0.2f (p=%0.3f)\n',fields{f},rho(i),p_0(i));
+        else
+            fprintf('Post DBS Corr, %s and LEDD: %0.2f (p=%0.3f)\n',fields{f},rho(i),p_0(i));
         end
     end
 end
 
-%% BIS and BDI
-
-for s = 1:2
-    [h(s) p(s)]= corr(stats{s}.BIS',stats{s}.BDI');
-end
-
-
-%% Ttest differences, questionnaires
+%% Table 2 Section 1: Ttest differences, questionnaires
 % BIS, subscales, EQ, QUIP
 
-fields = {'BIS','BIS_NonPlanning','BIS_Motor','BIS_Attentional',...
-    'BDI','QUIP','LEDD'};
+fprintf('Test pre-post differences in questionnaires\n');
+fields = {'BIS','BDI','QUIP','UPDRS',...
+      'LEDD'};
 for f = 1:length(fields)
     pre = stats{1}.(fields{f})';
     post = stats{2}.(fields{f})';
-    [h(f) p(f) ci tstat] = ttest(pre,post);
+    [h(f) p_1(f)] = ttest(pre, post);
 end
+[corr_p] = bonf_holm(p_1)
 
-plot_names = {'BIS','BIS NonPlanning','BIS Motor','BIS Attentional',...
-    'BDI','QUIP','LEDD'};
-figure(101)
-for f = 1:4
-    subplot(1,4,f);
-    h = boxplot([stats{1}.(fields{f})' stats{2}.(fields{f})'], 'Symbol','k.');
-    g = findobj(gca,'Tag','Box');
-    patch(get(g(2),'XData'),get(g(2),'YData'),'w');
-    patch(get(g(1),'XData'),get(g(1),'YData'),[0.7 0.7 0.7]);
-    set(h,'Color','k','LineStyle','-','LineWidth',1)
-    if f == 1
-        set(h(7),'Color','w');
-        set(h(14),'Color','w');
-    end
-    set(gca,'XTick',[1 2],'XTickLabels',{'Pre';'Post'});
-    set(gca,'children',flipud(get(gca,'children')))
-    
-    
-    if p(f)<0.05
-        sigstar({{'Pre','Post'}},p(f));
-    end
-    title(plot_names{f});
-    
-end
+%% Table 2 Section 2: 
+fprintf('Test pre-post differences in impulsivity tasks\n');
+fields = {'ELF','HaylingABError','Discount'};
 
-purty_plot(101,[D.FIGURES_DIR 'questionnaire_behavior1'],'eps')
-
-figure(102)
-for f = 5:7
-    subplot(1,3,f-4);
-    h = boxplot([stats{1}.(fields{f})' stats{2}.(fields{f})'], 'Symbol','k.');
-    g = findobj(gca,'Tag','Box');
-    patch(get(g(2),'XData'),get(g(2),'YData'),'w');
-    patch(get(g(1),'XData'),get(g(1),'YData'),[0.7 0.7 0.7]);
-    set(h,'Color','k','LineStyle','-','LineWidth',1)
-    if f == 1
-        set(h(7),'Color','w');
-        set(h(14),'Color','w');
-    end
-    set(gca,'XTick',[1 2],'XTickLabels',{'Pre';'Post'});
-    set(gca,'children',flipud(get(gca,'children')))
-    
-    
-    if p(f)<0.05
-        sigstar({{'Pre','Post'}},p(f));
-    end
-    title(plot_names{f});
-    
-end
-
-
-purty_plot(102,[D.FIGURES_DIR 'questionnaire_behavior2'],'pdf')
-
-%% Ttest differences in slot machine behavior, pre and post
-
-fields = {'bets';'machine_switches';'gamble';};
 for f = 1:length(fields)
-    pre = stats{1}.(fields{f});
-    post = stats{2}.(fields{f});
-    [h(f) p(f) ci tstat] = ttest(pre,post);
-    
+    pre = stats{1}.(fields{f})';
+    post = stats{2}.(fields{f})';
+    x1 = [repmat('a',38,1);repmat('b',38,1)];
+    x2 = [pre;post];
+    [tbl,chistat(f),p_2(f)] = crosstab(x1,x2);
 end
 
-%% Plots of slot machine behavior
+[corr_p] = bonf_holm(p_2)
 
-plot_names = {'Bets';'Machine switches';'Gamble'};
-figure(101)
+
+%% Supplementary Table 2:
+
+fprintf('Test pre-post differences\n');
+fields = {'BIS_Attentional','BIS_NonPlanning','BIS_Motor','Apathy',...
+    'EQ','GAI'};
 for f = 1:length(fields)
-    subplot(1,3,f);
-    h = boxplot([stats{1}.(fields{f}),stats{2}.(fields{f})], 'Symbol','k.');
-    g = findobj(gca,'Tag','Box');
-    patch(get(g(2),'XData'),get(g(2),'YData'),'w');
-    patch(get(g(1),'XData'),get(g(1),'YData'),[0.7 0.7 0.7]);
-    set(h,'Color','k','LineStyle','-','LineWidth',1)
-    if f == 1
-        set(h(7),'Color','w');
-        set(h(14),'Color','w');
-    end
-    set(gca,'XTick',[1 2],'XTickLabels',{'Pre';'Post'});
-    set(gca,'children',flipud(get(gca,'children')))
-    
-    
-    if p(f)<0.05
-        sigstar({{'Pre','Post'}},p(f));
-    end
-    title(plot_names{f});
-    
+    pre = stats{1}.(fields{f})';
+    post = stats{2}.(fields{f})';
+    [h(f) p_3(f)] = ttest(pre, post);
+    fprintf('Test %s: p=%0.5f\n', fields{f}, p_3(f));
 end
-
-purty_plot(101,[D.FIGURES_DIR 'slot_behavior'],'pdf')
+[corr_p,h] = bonf_holm(p_3);
 
