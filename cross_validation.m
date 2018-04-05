@@ -2,15 +2,6 @@ function cross_validation(stats,D)
 nice_colors
 
 %% Pre predicting max  change
-
-if nargin < 3
-    plot_flag = 0;
-end
-
-if nargin < 4
-    fp = 1;
-end
-
 for t = 1:2
     X = [log(stats{1}.omega) log(stats{1}.theta) stats{1}.BDI'];
     y = stats{2}.BIS_MaxIncrease';

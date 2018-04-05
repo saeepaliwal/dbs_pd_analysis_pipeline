@@ -10,23 +10,23 @@ addpath(genpath('./dbs_tapas/'));
 fp = 1;
 
 % Invert HHGF
-flags.run_hhgf = 1;
+flags.run_hhgf = 0;
 
 % Load questionnaire and anatomical data
-flags.load_q_and_a = 0;
+flags.load_q_and_a = 1;
 
 % Print parameters to CSV (for Phil)
 flags.print_parameters_to_csv = 0;
 
 % Post-hoc statistical analyses
-flags.run_figures_tables = 1;
-flags.run_cross_val = 0;
+flags.run_figures_tables = 0;
+flags.run_cross_validation = 0;
 
 %% Clear workspace and define values
 
 % Main directory
 
-D.PROJECT_FOLDER = '~/polybox/Projects/DBS_ParkinsonsPatients/results/';
+D.PROJECT_FOLDER = '~/polybox/Projects/DBS_ParkinsonsPatients/';
 
 
 % Data directories
@@ -35,7 +35,7 @@ D.LIST_OF_SUBJECT_DIRECTORIES = {[D.PROJECT_FOLDER 'PRE_DBS'];...
 D.SPREADSHEET_DIR = [D.PROJECT_FOLDER 'data_spreadsheets/'];
 
 % Results directories
-D.RESULTS_DIR = [D.PROJECT_FOLDER 'FinalStats/'];
+D.RESULTS_DIR = [D.PROJECT_FOLDER 'results/FinalStats/'];
 D.FIGURES_DIR = [D.RESULTS_DIR 'figures/'];
 D.REGRESSION_DIR = [D.RESULTS_DIR 'regressions/'];
 
@@ -55,28 +55,14 @@ end
 
 STATS_PRE = [D.RESULTS_DIR 'stats_PRE_DBS.mat'];
 STATS_POST = [D.RESULTS_DIR 'stats_POST_DBS.mat'];
-STATS_HHGF = [D.RESULTS_DIR 'stats_HHGF.mat'];
-STATS_ALL_DATA = [D.RESULTS_DIR 'stats_ALL_DATA.mat'];
-%STATS_HHGF = STATS_ALL_DATA;
+STATS_HHGF = [D.RESULTS_DIR 'stats_HHGF_RW_Freebeta.mat'];
+STATS_ALL_DATA = [D.RESULTS_DIR 'stats_ALL_DATA_RW_FreeBeta.mat'];
 
 PARAMETER_SPREADSHEET = [D.RESULTS_DIR 'DBS_PD_pre_post_parameters.csv'];
 
-if flags.load_original
-    stats = load('eduardo_rerun/stats_ALL_DATA.mat');
-    stats = stats.stats;
-else
-    %% Run models
-    if flags.run_hhgf
-        stats = hhgf_analysis(STATS_PRE, STATS_POST, flags);
-    else
-        stats = load('verification/eduardo_rerun/stats_ALL_DATA.mat');
-        stats = stats.stats; 
-    end
-    behavioral_stats = load('data/stats_behavioral.mat');
-    behavioral_stats = behavioral_stats.stats;
-    for i = 1:2
-        stats{i} = copy_fields(stats{i}, behavioral_stats{i});
-    end
+%% Run models
+if flags.run_hhgf
+    stats = hhgf_analysis(STATS_PRE, STATS_POST, flags);
 end
 
 %% Print parameters to csv
@@ -84,12 +70,14 @@ if flags.print_parameters_to_csv
     print_parameters_to_csv();
 end
 
-%% Analyse behavioral data, pre and pos
-% Supplementary table 3
-if flags.run_behavioral_analysis
-   % DONE
+%% Load questionnaire and anatomical data
+if flags.load_q_and_a
+    load(STATS_HHGF);
+    stats = load_questionnaires_and_anatomical_data(stats, D);
+    save(STATS_ALL_DATA,'stats');
+else
+    load(STATS_ALL_DATA);
 end
-
 
 
 %% Run regressions on winning model from paper

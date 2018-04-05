@@ -3,10 +3,7 @@ function parameter_regressions(stats)
 %% Define fields of interest
 fields = {'BIS';'BIS_Attentional';'BIS_NonPlanning';'BIS_Motor'}
 
-%% Define fields of interest
-fields = {'BIS', 'BIS_Attentional', 'BIS_Motor', 'BIS_NonPlanning'};
-
-%% Run behavioral regressions, pre and post
+%% Run parameter regressions, pre and post
 for s = 1:2
     if s == 1
         fprintf('\n%s\n\n\n',['PRE-DBS regressions']);
@@ -35,7 +32,7 @@ for s = 1:2
         end
         all_p(f,s) = r.fstat.pval;
         all_p_t(f,:) = r.tstat.pval(2:3);
-        reg_vals(r,stage,fields{f});
+        reg_vals(r,stage,fields{f},{'omega';'theta';'BDI'});
 
         if contains(fields{f}, 'Max')
             longitudinal.(fields{f}) = stats{2}.(fields{f});
