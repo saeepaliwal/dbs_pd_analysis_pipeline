@@ -2,12 +2,12 @@ function stats = hhgf_analysis(STATS_PRE, STATS_POST)
 %% Pre DBS
 
 % Run analyses
-[pre_stats] = wrapper(STATS_PRE, target_dir);
+[pre_stats] = wrapper(STATS_PRE);
 
 %% Post DBS
 
 % Run analyses
-[post_stats] = wrapper(STATS_POST, target_dir);
+[post_stats] = wrapper(STATS_POST);
 
 %% Combine stats
 
@@ -23,7 +23,7 @@ stats{2} = post_stats{1};
 
 end
 
-function [stats] = wrapper(STATS_STRUCT, dtarget)
+function [stats] = wrapper(STATS_STRUCT)
 %% Pull in the game trace of the slot machine
 load(fullfile('advanced_slot_machine_analysis','game_trace.mat'));
 
@@ -69,6 +69,7 @@ for p = 1:length(pars_of_interest)
     stats{iSub}.(param) = stats{iSub}.(param_all)(:,idx);
 end
 
-save(fullfile(dtarget, STATS_STRUCT), 'stats');
+save(STATS_STRUCT, 'stats');
 
 
+end

@@ -7,8 +7,6 @@ addpath(genpath('./dbs_tapas/'));
 
 %% Set analysis flags
 
-fp = 1;
-
 % Invert HHGF
 flags.run_hhgf = 0;
 
@@ -26,7 +24,7 @@ flags.run_cross_validation = 0;
 
 % Main directory
 
-D.PROJECT_FOLDER = '~/polybox/Projects/DBS_ParkinsonsPatients/';
+D.PROJECT_FOLDER = '/home/saee/Analyses/DBS_PD/';
 
 
 % Data directories
@@ -63,7 +61,7 @@ PARAMETER_SPREADSHEET = [D.RESULTS_DIR 'DBS_PD_pre_post_parameters.csv'];
 
 %% Run models
 if flags.run_hhgf
-    stats = hhgf_analysis(STATS_PRE, STATS_POST, flags);
+    stats = hhgf_analysis(STATS_PRE, STATS_POST);
     save(STATS_HHGF,'stats');
 end
 
