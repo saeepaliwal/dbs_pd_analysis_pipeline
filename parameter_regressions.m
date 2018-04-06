@@ -55,5 +55,5 @@ for f = 1:length(fields)
     r.y = y;
     r.X = X;
     all_p(f) = r.fstat.pval;
-    reg_vals(r,stage,fields{f});
+    reg_vals(r,stage,fields{f},{'omega';'theta';'BDI'})
 end
