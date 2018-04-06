@@ -73,8 +73,7 @@ for r = 1:length(resp_models)
     rw.c_prc.priorsas(1) = 0;
     rw.c_prc.priorsas(2) = 16;
     rw.c_obs.priormus = 1;
-    rw.c_obs.priorsas = 0;
-
+    rw.c_obs.priorsas = 1;
     rw.scale = 0.5;
     
     rw.ign = [];
