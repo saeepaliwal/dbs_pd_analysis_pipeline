@@ -26,7 +26,7 @@ flags.run_cross_validation = 0;
 
 % Main directory
 
-D.PROJECT_FOLDER = '~/polybox/Projects/DBS_ParkinsonsPatients/';
+D.PROJECT_FOLDER = '/home/saee/Analyses/DBS_PD/';
 
 
 % Data directories
@@ -35,7 +35,7 @@ D.LIST_OF_SUBJECT_DIRECTORIES = {[D.PROJECT_FOLDER 'PRE_DBS'];...
 D.SPREADSHEET_DIR = [D.PROJECT_FOLDER 'data_spreadsheets/'];
 
 % Results directories
-D.RESULTS_DIR = [D.PROJECT_FOLDER 'results/FinalStats/'];
+D.RESULTS_DIR = [D.PROJECT_FOLDER 'saee_rerun/'];
 D.FIGURES_DIR = [D.RESULTS_DIR 'figures/'];
 D.REGRESSION_DIR = [D.RESULTS_DIR 'regressions/'];
 
@@ -62,7 +62,7 @@ PARAMETER_SPREADSHEET = [D.RESULTS_DIR 'DBS_PD_pre_post_parameters.csv'];
 
 %% Run models
 if flags.run_hhgf
-    stats = hhgf_analysis(STATS_PRE, STATS_POST, flags);
+    stats = hhgf_analysis(STATS_PRE, STATS_POST);
 end
 
 %% Print parameters to csv
