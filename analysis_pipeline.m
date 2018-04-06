@@ -2,15 +2,12 @@
 %% Pull in all paths
 addpath(genpath('./advanced_slot_machine_analysis'));
 addpath(genpath('./tools'));
-addpath(genpath('./spm12'));
 addpath(genpath('./dbs_tapas/'));
 
 %% Set analysis flags
 
-fp = 1;
-
 % Invert HHGF
-flags.run_hhgf = 0;
+flags.run_hhgf = 1;
 
 % Load questionnaire and anatomical data
 flags.load_q_and_a = 0;
@@ -26,16 +23,15 @@ flags.run_cross_validation = 0;
 
 % Main directory
 
-D.PROJECT_FOLDER = '~/polybox/Projects/DBS_ParkinsonsPatients/';
+D.PROJECT_FOLDER = '~/polybox/Projects/DBS_ParkinsonsPatients/paper_2_anatomy';
 
 
 % Data directories
-D.LIST_OF_SUBJECT_DIRECTORIES = {[D.PROJECT_FOLDER 'PRE_DBS'];...
-    [D.PROJECT_FOLDER '/POST_DBS']};
+D.LIST_OF_SUBJECT_DIRECTORIES = {[D.PROJECT_FOLDER 'PRE_DBS']};
 D.SPREADSHEET_DIR = [D.PROJECT_FOLDER 'data_spreadsheets/'];
 
 % Results directories
-D.RESULTS_DIR = [D.PROJECT_FOLDER 'saee_rerun/'];
+D.RESULTS_DIR = [D.PROJECT_FOLDER 'results/'];
 D.FIGURES_DIR = [D.RESULTS_DIR 'figures/'];
 D.REGRESSION_DIR = [D.RESULTS_DIR 'regressions/'];
 
@@ -55,15 +51,14 @@ end
 
 STATS_PRE = [D.RESULTS_DIR 'stats_PRE_DBS.mat'];
 STATS_POST = [D.RESULTS_DIR 'stats_POST_DBS.mat'];
-STATS_HHGF = [D.RESULTS_DIR 'stats_HHGF_LongRerun.mat'];
-STATS_ALL_DATA_BASE = '/Users/saee/polybox/Projects/DBS_ParkinsonsPatients/results/FinalStats/stats_ALL_DATA.mat';
+STATS_HHGF = [D.RESULTS_DIR 'stats_HHGF.mat'];
 STATS_ALL_DATA = [D.RESULTS_DIR 'stats_ALL_DATA.mat'];
 
 PARAMETER_SPREADSHEET = [D.RESULTS_DIR 'DBS_PD_pre_post_parameters.csv'];
 
 %% Run models
 if flags.run_hhgf
-    stats = hhgf_analysis(STATS_PRE, STATS_POST, flags);
+    stats = hhgf_analysis(STATS_PRE, STATS_POST, D);
     save(STATS_HHGF,'stats');
 end
 
