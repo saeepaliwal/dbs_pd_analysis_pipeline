@@ -5,7 +5,7 @@ load game_trace.mat
 %% Step 1: Pull behavioral information
 % N.B: stats struct has the following structure: stats{subject_type}.fields
 
-if ~exist('STATS_STRUCT','file')
+if ~exist(STATS_STRUCT,'file')
     if ~iscell(D.LIST_OF_SUBJECT_DIRECTORIES)
         subject_dir = {D.LIST_OF_SUBJECT_DIRECTORIES};
     else

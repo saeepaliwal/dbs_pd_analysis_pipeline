@@ -43,14 +43,16 @@ if flags.load_q_and_a
     load(STATS_HHGF);
     stats = load_questionnaires_and_anatomical_data(stats, D);
     save(STATS_ALL_DATA,'stats');
-else
-    load(STATS_ALL_DATA);
 end
 
 
 %% Run regressions on winning model from paper
 if flags.run_figures_tables
-    
+
+if ~flags.load_q_and_a
+load(STATS_ALL_DATA);
+end
+
     %% Table 2 and Supplementary table 2:
     % Questionnaire and slot machine behavior
     behavioral_data_analyses(stats, D)
