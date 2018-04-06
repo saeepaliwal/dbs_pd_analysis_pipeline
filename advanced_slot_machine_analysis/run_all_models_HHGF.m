@@ -53,9 +53,9 @@ for r = 1:length(resp_models)
     pars = struct();
     pars.seed = 1;
     pars.ndiag = 200;
-    pars.niter = 9000;
+    pars.niter = 4000;
     pars.nburnin = 2000;
-    pars.T = ones(num_subjects, 1) * linspace(0.01, 1, 2).^5;
+    pars.T = ones(num_subjects, 1) * linspace(0.01, 1, 32).^5;
     pars.mc3it = 4;
     
     % Rescorla-Wagner

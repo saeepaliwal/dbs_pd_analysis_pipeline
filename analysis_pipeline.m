@@ -1,8 +1,4 @@
 
-%% Pull in all paths
-addpath(genpath('./advanced_slot_machine_analysis'));
-addpath(genpath('./tools'));
-addpath(genpath('./dbs_tapas/'));
 
 %% Set analysis flags
 
@@ -18,31 +14,6 @@ flags.print_parameters_to_csv = 0;
 % Post-hoc statistical analyses
 flags.run_figures_tables = 0;
 flags.run_cross_validation = 0;
-
-%% Clear workspace and define values
-
-% Main directory
-
-D.PROJECT_FOLDER = '~/polybox/Projects/DBS_ParkinsonsPatients/paper_2_anatomy';
-
-
-% Data directories
-D.LIST_OF_SUBJECT_DIRECTORIES = {[D.PROJECT_FOLDER 'PRE_DBS']};
-D.SPREADSHEET_DIR = [D.PROJECT_FOLDER 'data_spreadsheets/'];
-
-% Results directories
-D.RESULTS_DIR = [D.PROJECT_FOLDER 'results/'];
-D.FIGURES_DIR = [D.RESULTS_DIR 'figures/'];
-D.REGRESSION_DIR = [D.RESULTS_DIR 'regressions/'];
-
-% Create any necessary directories
-results_dirs = {'RESULTS_DIR'; 'FIGURES_DIR'; 'REGRESSION_DIR'};
-for iDir = 1:numel(results_dirs)
-    results_dir = results_dirs{iDir};
-    if ~exist(D.(results_dir),'dir')
-        mkdir(D.(results_dir));
-    end
-end
 
 %% Names of output stats strucutures
 % N.B. stats is structured as follows:

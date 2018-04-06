@@ -2,12 +2,20 @@ function stats = hhgf_analysis(STATS_PRE, STATS_POST,D)
 %% Pre DBS
 
 % Run analyses
+<<<<<<< HEAD
 [pre_stats] = hhgf_analysis_wrapper(STATS_PRE,D);
+=======
+[pre_stats] = wrapper(STATS_PRE);
+>>>>>>> 78d62b4a78c040294731c5ca3836823232b726a9
 
 %% Post DBS
 
 % Run analyses
+<<<<<<< HEAD
 [post_stats] = hhgf_analysis_wrapper(STATS_POST,D);
+=======
+[post_stats] = wrapper(STATS_POST);
+>>>>>>> 78d62b4a78c040294731c5ca3836823232b726a9
 
 %% Combine stats
 
