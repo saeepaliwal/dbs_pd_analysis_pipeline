@@ -1,5 +1,6 @@
 function model_result_analyses(stats, D)
 % Calculates the reuslts shown in Table 4 and prints Figure 3
+fields = {'BIS';'BIS_Attentional';'BIS_NonPlanning';'BIS_Motor'};
 
 %% T Test on pre and post model parameters
 display_figure = 0;

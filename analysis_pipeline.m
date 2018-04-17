@@ -1,19 +1,28 @@
+%% Pull in all paths
+addpath(genpath('./advanced_slot_machine_analysis'));
+addpath(genpath('./tools'));
+addpath(genpath('./dbs_tapas/'));
 
+%% Make directories
 
-%% Set analysis flags
+D.PROJECT_FOLDER = PROJECT_FOLDER;
+% Data directories
+D.LIST_OF_SUBJECT_DIRECTORIES = {[D.PROJECT_FOLDER 'PRE_DBS']};
+D.SPREADSHEET_DIR = [D.PROJECT_FOLDER 'data_spreadsheets/'];
 
-% Invert HHGF
-flags.run_hhgf = 1;
+% Results directories
+D.RESULTS_DIR = [D.PROJECT_FOLDER 'results/'];
+D.FIGURES_DIR = [D.RESULTS_DIR 'figures/'];
+D.REGRESSION_DIR = [D.RESULTS_DIR 'regressions/'];
 
-% Load questionnaire and anatomical data
-flags.load_q_and_a = 0;
-
-% Print parameters to CSV (for Phil)
-flags.print_parameters_to_csv = 0;
-
-% Post-hoc statistical analyses
-flags.run_figures_tables = 0;
-flags.run_cross_validation = 0;
+% Create any necessary directories
+results_dirs = {'RESULTS_DIR'; 'FIGURES_DIR'; 'REGRESSION_DIR'};
+for iDir = 1:numel(results_dirs)
+    results_dir = results_dirs{iDir};
+    if ~exist(D.(results_dir),'dir')
+        mkdir(D.(results_dir));
+    end
+end
 
 %% Names of output stats strucutures
 % N.B. stats is structured as follows:
@@ -25,7 +34,24 @@ STATS_POST = [D.RESULTS_DIR 'stats_POST_DBS.mat'];
 STATS_HHGF = [D.RESULTS_DIR 'stats_HHGF.mat'];
 STATS_ALL_DATA = [D.RESULTS_DIR 'stats_ALL_DATA.mat'];
 
-PARAMETER_SPREADSHEET = [D.RESULTS_DIR 'DBS_PD_pre_post_parameters.csv'];
+D.PARAMETER_SPREADSHEET = [D.RESULTS_DIR 'DBS_pre_parameters.csv'];
+
+
+%% Set analysis flags
+
+% Invert HHGF
+flags.run_hhgf = 0;
+
+% Load questionnaire and anatomical data
+flags.load_q_and_a = 0;
+
+% Print parameters to CSV (for Phil)
+flags.print_parameters_to_csv = 1;
+
+% Post-hoc statistical analyses
+flags.run_figures_tables = 0;
+flags.run_cross_validation = 0;
+
 
 %% Run models
 if flags.run_hhgf
@@ -35,7 +61,7 @@ end
 
 %% Print parameters to csv
 if flags.print_parameters_to_csv
-    print_parameters_to_csv();
+    print_parameters_to_csv(stats,D);
 end
 
 %% Load questionnaire and anatomical data
