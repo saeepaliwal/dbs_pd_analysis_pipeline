@@ -6,6 +6,7 @@ addpath(genpath('./dbs_tapas/'));
 %% Make directories
 
 D.PROJECT_FOLDER = PROJECT_FOLDER;
+
 % Data directories
 D.LIST_OF_SUBJECT_DIRECTORIES = {[D.PROJECT_FOLDER 'PRE_DBS']};
 D.SPREADSHEET_DIR = [D.PROJECT_FOLDER 'data_spreadsheets/'];
@@ -45,7 +46,7 @@ flags.run_hhgf = 0;
 % Load questionnaire and anatomical data
 flags.load_q_and_a = 0;
 
-% Print parameters to CSV (for Phil)
+% Print parameters to CSV for Phil
 flags.print_parameters_to_csv = 1;
 
 % Post-hoc statistical analyses
