@@ -14,7 +14,7 @@ if ~exist(STATS_STRUCT,'file')
     
     stats = {};
     for i = 1:length(subject_dir)
-        stats{i} = output2mat(subject_dir{i})
+        stats{i} = output2mat(subject_dir{i});
     end
     
     save(STATS_STRUCT,'stats');

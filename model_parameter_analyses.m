@@ -64,9 +64,9 @@ figure(101)
 clf
 hold on
 
-bar([stats{1}.FE_grid], ...
-    'FaceColor',grey,'EdgeColor','k');
-title('Group-level free energy, pre-DBS');
+b=bar([stats{1}.FE_grid], ...
+    'FaceColor',grey,'EdgeColor','none');
+%title('Group-level free energy, pre-DBS');
 xticks(1:3);
 xticklabels({'Std';'UD';'RW'});
 ylim([-1942 -1935])

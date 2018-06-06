@@ -115,20 +115,22 @@ for i = 1:length(subjects)
     % Variance of bet behaviour
     stats.B_var(i) = var(bets);
     
+    N = sum(bets>0);
+    
     % Mean of bet behav
-    stats.B_mean(i) = mean(bets);
+    stats.B_mean(i) = sum(bets)/N;
     
     % Pressing stop button
-    stats.pressed_stop(i) = sum(pressed_stop);
+    stats.pressed_stop(i) = sum(pressed_stop)/N;
         
     % Percentage cashouts:
-    stats.cashoutPct(i) = sum(nansum(cashout))/length(cashout);
+    stats.cashoutPct(i) = sum(nansum(cashout))/N;
     
     % Percentage switches:
-    stats.switchPct(i) = sum(nansum(switches))/length(switches);
+    stats.switchPct(i) = sum(nansum(switches))/N;
     
     % Percentage gamble:
-    stats.gamblePct(i) = sum(gamble)/length(gamble);
+    stats.gamblePct(i) = sum(gamble)/N;
         
     % Percentage Switch Bets: Added Rike
     

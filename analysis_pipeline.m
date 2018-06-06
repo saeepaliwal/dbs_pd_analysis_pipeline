@@ -72,7 +72,6 @@ if flags.load_q_and_a
     save(STATS_ALL_DATA,'stats');
 end
 
-
 %% Run regressions on winning model from paper
 if flags.run_figures_tables
 

@@ -13,10 +13,10 @@ for r = 1:runs
         end
         idx = find(llh==max(llh));
         kappa_all(m,r) = 1;
-        %omega_all(m,r) = exp(pars_distro(idx(1),1));
-        %theta_all(m,r) = exp(pars_distro(idx(1),2));
-        omega_all(m,r) = exp(mean(pars_distro(:,1)));
-        theta_all(m,r) = exp(mean(pars_distro(:,2)));
+        omega_all(m,r) = exp(pars_distro(idx(1),1));
+        theta_all(m,r) = exp(pars_distro(idx(1),2));
+        %omega_all(m,r) = exp(mean(pars_distro(:,1)));
+        %theta_all(m,r) = exp(mean(pars_distro(:,2)));
         
         llh_avg = mean(hh.llh{1},3);
         llh_all(m,r) = trapz(hh.T(1,:),llh_avg(m,:));
@@ -46,4 +46,4 @@ else
     FE_RW = [];
 end
 
-end
+
