@@ -14,12 +14,13 @@ for s = 1:length(stats)
     end
     
     fprintf(fid,'%s\n',['Patient Name,Omega,Theta,Beta,'...
-        'AvgBetSize,MachineSwitchPct']);
+        'AvgBetSize,MachineSwitchPct,GamblePct,CashoutPct']);
     
     for i = 1:length(stats{s}.labels)
-        fprintf(fid,'%s,%0.4f,%0.4f,%0.4f,%0.2f,%0.2f\n',stats{s}.labels{i},...
+        fprintf(fid,'%s,%0.4f,%0.4f,%0.4f,%0.2f,%0.2f,%0.2f,%0.2f\n',stats{s}.labels{i},...
             log(stats{s}.omega(i)),log(stats{s}.theta(i)),log(stats{s}.beta(i)),...
-            bet_mean(i),m_switch(i));
+            bet_mean(i),m_switch(i),...
+        stats{s}.gamblePct(i), stats{s}.cashoutPct(i));
     end
 end
 
