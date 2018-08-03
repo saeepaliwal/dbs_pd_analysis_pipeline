@@ -174,7 +174,7 @@ c.priorsas = [
 
 % Check whether we have the right number of priors
 expectedLength = 3*c.n_levels+2*(c.n_levels-1)+1;
-if length([c.priormus, c.priorsas]) ~= 2*expectedLength;
+if length([c.priormus, c.priorsas]) ~= 2*expectedLength
     error('tapas:hgf:PriorDefNotMatchingLevels', 'Prior definition does not match number of levels.')
 end
 

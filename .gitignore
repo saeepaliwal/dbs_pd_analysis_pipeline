@@ -4,3 +4,4 @@ config.m
 config_anatomy.m
 config_behavior.m
 .gitignore~
+*.*~
