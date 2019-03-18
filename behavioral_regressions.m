@@ -30,6 +30,7 @@ for s = 1:2
         
         all_p_t(f,:) = r.tstat.pval(2:end-1)';
         
+        %reg_vals(r)
         reg_vals(r, title, fields{f});
         
         if any(r.cookd>1)
@@ -38,3 +39,21 @@ for s = 1:2
         
     end
 end
+
+
+%% Run behavioral regressions, pre to post
+fields = {'LEDD_MaxDecrease'};
+X = [stats{2}.bets-stats{1}.bets...
+    stats{2}.machine_switches-stats{1}.machine_switches...
+    stats{2}.gamble- stats{1}.gamble...
+    stats{2}.BDI'-stats{1}.BDI'];
+
+%y = stats{2}.BIS'-stats{1}.BIS';
+y = stats{1}.BIS_MaxIncrease;
+r = regstats(y, X, 'linear');
+r.y = y;
+r.X = X;
+
+title = 'BIS change with behavior change';
+reg_vals(r, title,fields{1}, {'Bets','MS','Gamble','BDI'});
+

@@ -74,3 +74,15 @@ for f = 1:length(fields)
 end
 [corr_p,h] = bonf_holm(p_3);
 
+
+%% Supplementary Table 3:
+
+fprintf('Test pre-post differences\n');
+fields = {'bets','machine_switches','gamble'};
+for f = 1:length(fields)
+    pre = stats{1}.(fields{f})';
+    post = stats{2}.(fields{f})';
+    [h(f) p_4(f)] = ttest(pre, post);
+    fprintf('Test %s: p=%0.5f\n', fields{f}, p_4(f));
+end
+[corr_p,h] = bonf_holm(p_4);

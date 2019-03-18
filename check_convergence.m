@@ -5,18 +5,19 @@ function check_convergence(stats, subject_type,model)
 %     model: 1 for HGF, 2 for RW
 %% Check for convergence
 posterior = stats{subject_type}.hhgf_est{model};
-groups = 2;
+groups = 4;
 for s = 1:length(posterior.data)
     A = [];
-    N = length(posterior.samples_theta);
+    N = size(posterior.samples_theta,2);
     for i = 1:N
-        A(1,:,i) = posterior.samples_theta{i}{s};
+        A(1,:,i) = posterior.samples_theta{s,i}([end-2 end]pa);
     end
     
     [ R(s,:) ] = mcmcgr(A,groups);
 end
 
 parameters = {'omega';'theta';'beta'};
+R
 if any(any(R>1.1)==1)
     p = parameters{find(any(R>1.1))};
     fprintf('\n%s %d %s\n','WARNING: Model', model, 'has not converged for all parameters across subjects.');
