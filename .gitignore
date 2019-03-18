@@ -16,4 +16,4 @@ lib
 *.mexw64
 *.asv
 examples/
-results/
+results/STATS_DBS_*.mat
