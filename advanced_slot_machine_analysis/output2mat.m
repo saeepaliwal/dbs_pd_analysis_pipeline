@@ -178,9 +178,7 @@ for i = 1:length(subjects)
 
 % Aggregate variables
 stats.allBets = allBets;
-stats.allReaction = allReaction;
 stats.allPerf = allPerf;
-stats.allDiffPerf = allDiffPerf;
 stats.allBetSwitch = +(allBetSwitch~=0);
 stats.allSwitches = allSwitch;
 stats.allCashout = allCashout;

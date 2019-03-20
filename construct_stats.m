@@ -10,3 +10,5 @@ stats = {};
 for i = 1:length(subject_dir)
     stats{i} = output2mat(subject_dir{i});
 end
+
+cd(D.PROJECT_FOLDER)

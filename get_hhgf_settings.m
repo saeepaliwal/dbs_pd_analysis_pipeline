@@ -16,7 +16,6 @@ hgf.c_obs.transp_obs_fun = str2func(transp_fun);
 
 % Initialize perceptual priors
 config = tapas_hgf_binary_config();
-config.priorsas(end) = 0;
 hgf.c_prc.priormus = config.priormus;
 hgf.c_prc.priorsas = config.priorsas;
 hgf.c_prc.n_levels = config.n_levels;

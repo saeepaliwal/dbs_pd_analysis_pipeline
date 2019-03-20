@@ -10,7 +10,7 @@ for s = 1:length(posterior.data)
     A = [];
     N = size(posterior.samples_theta,2);
     for i = 1:N
-        A(1,:,i) = posterior.samples_theta{s,i}([end-2 end]pa);
+        A(1,:,i) = posterior.samples_theta{s,i}([end-2 end]);
     end
     
     [ R(s,:) ] = mcmcgr(A,groups);
