@@ -1,16 +1,9 @@
-function stats = run_hhgf(stats, resp_models)
+function stats_out = run_hhgf(stats, resp_models)
 % Double HGF on response models
 
 for iSubType = 1:length(stats)
     for r = 1:length(resp_models)
         resp_model = resp_models{r};
- 
-        if isfield(stats{iSubType},'hhgf_est')
-            stats{iSubType} = rmfield(stats{iSubType},'hhgf_est');
-        end
-        if isfield(stats{iSubType},'rw_est')
-            stats{iSubType} = rmfield(stats{iSubType},'rw_est');
-        end
         
         %% Run perceptual variables
         num_subjects = length(stats{iSubType}.labels);
@@ -34,18 +27,15 @@ for iSubType = 1:length(stats)
         end
         
         % Set number of chains:
-        nchains = 1;
+       
         
-        [hhgf, rw, pars, inference] = get_hhgf_settings(resp_model, nchains);
+        [hhgf, rw, pars, inference] = get_hhgf_settings(resp_model);
         
         % Get HHGF parameters
         if strcmp(resp_model,'tapas_softmax_binary') || strcmp(resp_model,'tapas_softmax_binary_invsig2')
-            fprintf('Setting up hhgf run with nchains: %d\n',nchains);
-            
             estimate = tapas_h2gf_estimate(subjects, hhgf, inference, pars);
             stats{iSubType}.hhgf_est{r} = estimate;
         elseif strcmp(resp_model,'rescorla_wagner')
-            [rw, pars, inference] = get_rw_parameters(resp_model, nchains);
             estimate = tapas_h2gf_estimate(subjects, rw, inference, pars);
             stats{iSubType}.rw_est = estimate;
         end
@@ -56,8 +46,8 @@ for iSubType = 1:length(stats)
 end
 
 for i = 1:length(stats{1}.labels)
-    if ~strcmp(stats{1}.labels{i}(1:end-4), ...
-            stats{2}.labels{i}(1:end-5))
+    if ~strcmp(stats{1}.labels{i},stats{2}.labels{i})
         error('Labels are not aligned correctly!');
     end
 end
+stats_out = stats;

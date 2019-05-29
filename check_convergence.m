@@ -5,7 +5,7 @@ function check_convergence(stats, subject_type,model)
 %     model: 1 for HGF, 2 for RW
 %% Check for convergence
 posterior = stats{subject_type}.hhgf_est{model};
-groups = 4;
+groups = 2;
 for s = 1:length(posterior.data)
     A = [];
     N = size(posterior.samples_theta,2);

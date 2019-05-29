@@ -1,4 +1,4 @@
-function stats = output2mat(output_dir)
+function stats = output2mat(output_dir, subjects_to_include)
 % Makes stats structure for subjects.
 % Subjects should be a vector of integers
 %% Applies various incarnations of the HGF to the gambling paradigm
@@ -33,17 +33,35 @@ if length(subjects) == 0
 end
 
 % Individual Effects: pull out patient-by-patient stats
+subject_list = [];
 for i = 1:length(subjects)
     
-    stats.labels(i) = subjects(i);
-    subject_name = subjects{i};
+    label = lower(subjects(i));
+    label = strrep(label,'_pre','');
+    label = strrep(label,'_post','');
+    label{1}(1) = 'P';
+    
+    if ismember(str2num(label{:}(end-1:end)), subjects_to_include)
+        subject_list = [subject_list subjects(i)];
+    end
+end
+
+for i = 1:length(subject_list)
+    label = lower(subject_list(i));
+    label = strrep(label,'_pre','');
+    label = strrep(label,'_post','');
+    label{1}(1) = 'P';
+    
+    
+    stats.labels(i) = label;
+    subject_name = subject_list{i};
     subdir = [output_dir '/' subject_name '/1/'];
     subdir = [output_dir subject_name '/1/'];
     
     if ~exist(subdir)
         subdir = [output_dir '/' subject_name '/'];
     end
-
+    
     cd(subdir);
     if exist('./1','dir')
         cd 1;
@@ -52,20 +70,20 @@ for i = 1:length(subjects)
     t = dir('*.txt');
     % Vars to define:
     % bets, P, current_machine,switches, performance, gamble, win grade, gambleOutcome,
-  
-
+    
+    
     if length(d)>0
         load(d.name);
         % Pull in variables:
         current_machine = machine_sequence;
         [no_gamble, cashout, lenOfPlay] = parse_output_short(t.name);
     else
-        load result_sequence     
+        load result_sequence
         [no_gamble, cashout, lenOfPlay, current_machine, bet_size, account, pressed_stop] = parse_output_short(t.name);
     end
-       
+    
     % Performance
-
+    
     end_idx = length(account);
     performance = account(6:end);
     
@@ -94,7 +112,7 @@ for i = 1:length(subjects)
     no_gamble = no_gamble(6:end_idx);
     gamble = gamble.*no_gamble';
     gambleOutcome = gambleOutcome.*no_gamble';
-     
+    
     % Win grade
     win=(P==1);
     grade = str2num(result_sequence(6:end_idx,2)).*win;
@@ -113,34 +131,34 @@ for i = 1:length(subjects)
     
     % Summary statistics:
     % Variance of bet behaviour
-    stats.B_var(i) = var(bets);
+    stats.behavior.B_var(i) = var(bets);
     
     N = sum(bets>0);
     
     % Mean of bet behav
-    stats.B_mean(i) = sum(bets)/N;
+    stats.behavior.B_mean(i) = sum(bets)/N;
     
     % Pressing stop button
-    stats.pressed_stop(i) = sum(pressed_stop)/N;
-        
+    stats.behavior.pressed_stop(i) = sum(pressed_stop)/N;
+    
     % Percentage cashouts:
-    stats.cashoutPct(i) = sum(nansum(cashout))/N;
+    stats.behavior.cashoutPct(i) = sum(nansum(cashout))/N;
     
     % Percentage switches:
-    stats.switchPct(i) = sum(nansum(switches))/N;
+    stats.behavior.switchPct(i) = sum(nansum(switches))/N;
     
     % Percentage gamble:
-    stats.gamblePct(i) = sum(gamble)/N;
-        
+    stats.behavior.gamblePct(i) = sum(gamble)/N;
+    
     % Percentage Switch Bets: Added Rike
     
-    stats.switchbetPct(i) = 1-(length(find(diff(bets)==0))/length(bets));
+    stats.behavior.switchbetPct(i) = 1-(length(find(diff(bets)==0))/length(bets));
     
     % Performance score
-    stats.finalPerf(i) = performance(end);
+    stats.behavior.finalPerf(i) = performance(end);
     
     % Length of play
-    stats.lenPlay(i) = lenOfPlay;
+    stats.behavior.lenPlay(i) = lenOfPlay;
     
     % All Bets
     allBets = [allBets bets'];
@@ -173,16 +191,15 @@ for i = 1:length(subjects)
     stats.data{i}.lenOfPlay = lenOfPlay;
     stats.data{i}.current_machine = current_machine;
     stats.data{i}.performance = performance;
- end
-
+end
 
 % Aggregate variables
-stats.allBets = allBets;
-stats.allPerf = allPerf;
-stats.allBetSwitch = +(allBetSwitch~=0);
-stats.allSwitches = allSwitch;
-stats.allCashout = allCashout;
-stats.allMachine = allMachine;
+stats.behavior.allBets = allBets;
+stats.behavior.allPerf = allPerf;
+stats.behavior.allBetSwitch = +(allBetSwitch~=0);
+stats.behavior.allSwitches = allSwitch;
+stats.behavior.allCashout = allCashout;
+stats.behavior.allMachine = allMachine;
 
 
 

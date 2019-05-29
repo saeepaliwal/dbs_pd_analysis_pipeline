@@ -19,3 +19,4 @@ examples/
 results/STATS_DBS_*.mat
 PRE_DBS/
 results/*.csv
+data/*

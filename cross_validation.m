@@ -1,10 +1,11 @@
 function cross_validation(stats)
 nice_colors
 
+N_sub = length(stats{1}.labels);
 %% Pre predicting max  change
 for t = 1:2
     X = [stats{1}.omega stats{1}.beta];
-    y = stats{2}.ICD_MaxIncrease';
+    y = stats{2}.BIS_MaxIncrease';
 
 
     for i = 1:10000
@@ -14,13 +15,13 @@ for t = 1:2
         end
         residuals = [];
         if t == 1
-
-            X(:, 2) = X(randperm(38), 2);
+            
+            X(:, 1) = X(randperm(N_sub), 1);
 
         elseif t == 2
-            y = y(randperm(38));
+            y = y(randperm(N_sub));
         end
-        for j = 1:38
+        for j = 1:N_sub
 
             x_test = X(j, :);
             x_train = X;
@@ -28,7 +29,7 @@ for t = 1:2
 
 
             mean_X = mean(x_train, 1);
-            x_train  = [ones(37,1) (x_train - repmat(mean_X,37,1))];
+            x_train  = [ones(N_sub-1,1) (x_train - repmat(mean_X,N_sub-1,1))];
             
             x_test =  [1 (X(j,:) - mean_X)];
             
@@ -49,14 +50,14 @@ end
 
 
 X = [stats{1}.omega stats{1}.beta];
-y = stats{2}.ICD_MaxIncrease';
+y = stats{2}.BIS_MaxIncrease';
 
-for i = 1:38
+for i = 1:N_sub
     train_X = X;
     train_X(i,:) = [];
 
     mean_X = mean(train_X, 1);
-    train_X  = [ones(37,1) (train_X - repmat(mean_X, 37, 1))];
+    train_X  = [ones(N_sub-1,1) (train_X - repmat(mean_X, N_sub-1, 1))];
 
     test_X =  [1 (X(i,:) - mean_X)];
 
@@ -76,7 +77,7 @@ save cv_workspace
 %% Get p-values of distributions
 predictive_residuals = sum(oos_cv);
 
-permutation_test = {'theta', 'whole model'};
+permutation_test = {'omega', 'whole model'};
 
 for i = 1:2
     fprintf('Permutation test: %s\n', permutation_test{i});
@@ -132,7 +133,7 @@ patch(patch_coords, [0 0 patch_dim_2 patch_dim_2], 'b','FaceAlpha',0.15,'EdgeCol
 plot(repmat(sum(oos_cv),patch_dim_2,1),[1:patch_dim_2],'Color','r','LineWidth',2)
 xlabel('Sum squared error')
 ylabel('No. Samples')
-title('Cross validation, \beta');
+title('Cross validation, \omega');
 %xlim([1000 2500]);
 %purty_plot(1,[D.FIGURES_DIR 'cross_validation_histogram'],'tiff')
 

@@ -1,29 +1,37 @@
 function parameter_regressions(stats)
 close all
- % This function prints the results reported in Table 5 of the manuscript
-
+% This function prints the results reported in Table 5 of the manuscript
+ls
 
 %% Run parameter regressions, pre and post
-fields = {'BIS','UPDRS','ICD'};
+fields = {'BIS_Total','BIS_NonPlanning','BIS_Motor','BIS_Attentional',...
+    'UPDRS_Total', 'BIS_MaxIncrease', 'UPDRS_MaxDecrease'};
 for s = 1:2
-
+    
     if s == 1
         fprintf('\n%s\n\n\n',['PRE-DBS regressions']);
     else
         fprintf('\n%s\n\n\n',['POST-DBS regressions']);
     end
-
+    
+    %for t = 1:2
+    %fprintf('\n%s %d\n',['Subtype'], t);
+    
     % Behavioral regressions
     for f = 1:length(fields)
-
+        
         if strcmp(fields{f},'UPDRS')
             X = [stats{s}.omega stats{s}.beta];
             indep_vars = {'omega';'beta'};
         else
-            X = [stats{s}.omega stats{s}.beta stats{s}.BDI'];
-            indep_vars = {'omega';'beta';'BDI';'st'};
+            X = [stats{s}.omega stats{1}.beta stats{s}.BDI_Total'];
+            indep_vars = {'omega','beta','BDI'};
         end
+        
         y = stats{s}.(fields{f})';
+        
+        % subtype_index = stats{1}.subtype==t;
+        % r = regstats(y(subtype_index),X(subtype_index,:),'linear');
         r = regstats(y,X,'linear');
         r.y = y;
         r.X = X;
@@ -32,11 +40,11 @@ for s = 1:2
         else
             stage = 'Param POST-DBS';
         end
-
+        
         reg_vals(r,stage,fields{f},indep_vars);
-        reg_figs(r,y,X,fields{f}, indep_vars)
-
-
+        %reg_figs(r,y,X,fields{f}, indep_vars)
+        
+        
         if contains(fields{f}, 'Max')
             longitudinal.(fields{f}) = stats{2}.(fields{f});
         else
@@ -44,31 +52,38 @@ for s = 1:2
                 stats{2}.(fields{f}) - stats{1}.(fields{f});
         end
     end
+    %end
 end
 
-%% Pre predicting max  change
+%% Pre predicting max increase
 fprintf('\n%s\n\n','PRE-DBS predicting max diff');
 
-fields = {'BIS_MaxIncrease','ICD_MaxIncrease', 'UPDRS_MaxDecrease'};
+fields = {'BIS_MaxIncrease', 'UPDRS_MaxDecrease'};
+
+%fields = {'BIS_Total','BIS_NonPlanning','BIS_Motor','BIS_Attentional'};
 
 
-stage = 'Param Pre';
-for f = 1:length(fields)
-
-    X = [stats{1}.omega stats{1}.beta stats{1}.BDI'];
-
-    y = stats{2}.(fields{f}); % It's the same in stats{1} and stats{2}
-    %y = stats{2}.BIS-stats{1}.BIS;
-    r = regstats(y,X,'linear');
-    r.y = y;
-    r.X = X;
-    all_p(f) = r.fstat.pval;
-
-    reg_vals(r,stage,fields{f},{'omega';'beta';'BDI';'st'})
-    
-    %reg_figs(r,y,X, fields{f},{'omega';'beta';'BDI'});
-
-end
+% stage = 'Param Pre';
+% for f = 1:length(fields)
+%
+%     for t = 1:2
+%
+%     X = [stats{1}.omega stats{1}.beta stats{1}.BDI_Total'];
+%
+%
+%     %y = stats{2}.(fields{f}); % It's the same in stats{1} and stats{2}
+%     y = stats{2}.(fields{f})-stats{1}.(fields{f});
+%
+%     r = regstats(y,X,'linear');
+%     r.y = y;
+%     r.X = X;
+%     all_p(f) = r.fstat.pval;
+%
+%     reg_vals(r,stage,fields{f},{'omega';'beta';'BDI'})
+%
+%     %reg_figs(r,y,X, fields{f},{'omega';'beta';'BDI'});
+%
+% end
 
 %% LEDD Change
 
@@ -79,7 +94,6 @@ y = stats{2}.LEDD_MaxDecrease;
 r = regstats(y,X,'linear');
 r.y = y;
 r.X = X;
-%all_p(f) = r.fstat.pval;
 
 reg_vals(r,stage,'LEDD Change',{'\Delta\omega';'\Delta\beta'})
 reg_figs(r,y,X,'LEDD Change', {'\Delta\omega';'\Delta\beta'})

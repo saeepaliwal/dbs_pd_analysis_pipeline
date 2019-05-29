@@ -1,10 +1,6 @@
 function print_parameters_to_csv(stats,D)
 %% Print to CSV
 fid = fopen(D.PARAMETER_SPREADSHEET,'w');
-N = sum(stats{1}.allBets>0,1);
-bet_mean = sum(stats{1}.allBets,1)./N;
-m_switch = sum(stats{1}.allSwitches,1)./N;
-
 
 for s = 1:length(stats)
     if s == 1
@@ -13,6 +9,10 @@ for s = 1:length(stats)
         fprintf(fid,'%s\n','Post-DBS');
     end
     
+    N = sum(stats{s}.behavoior.allBets>0,1);
+    bet_mean = sum(stats{s}.behavoior.allBets,1)./N;
+    m_switch = sum(stats{s}.behavoior.allSwitches,1)./N;
+
     fprintf(fid,'%s\n',['Patient Name,Omega,Theta,Beta,'...
         'AvgBetSize,MachineSwitchPct,GamblePct,CashoutPct']);
     
@@ -20,7 +20,7 @@ for s = 1:length(stats)
         fprintf(fid,'%s,%0.4f,%0.4f,%0.4f,%0.2f,%0.2f,%0.2f,%0.2f\n',stats{s}.labels{i},...
             stats{s}.omega(i),stats{s}.theta(i), stats{s}.beta(i),...
             bet_mean(i),m_switch(i),...
-        stats{s}.gamblePct(i), stats{s}.cashoutPct(i));
+        stats{s}.behavior.gamblePct(i), stats{s}.behavior.cashoutPct(i));
     end
 end
 
