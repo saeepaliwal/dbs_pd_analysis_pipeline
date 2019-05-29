@@ -1,7 +1,7 @@
 %% Pull in all paths
 addpath(genpath('./advanced_slot_machine_analysis'));
 addpath(genpath('./tools'));
-addpath(genpath('./tapas/'));
+addpath(genpath('./tapas_saee/'));
 %% Specify relevant directories
 
 PROJECT_FOLDER = pwd;
