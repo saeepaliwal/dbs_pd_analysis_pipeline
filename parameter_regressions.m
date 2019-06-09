@@ -73,7 +73,7 @@ fields = {'BIS_MaxIncrease', 'UPDRS_MaxDecrease'};
 %     X = [stats{1}.omega stats{1}.beta stats{1}.BDI_Total'];
 %
 %
-%     %y = stats{2}.(fields{f}); % It's the same in stats{1} and stats{2}
+%     %y = stats{2}.(fields{f}); % It's theysame in stats{1} and stats{2}
 %     y = stats{2}.(fields{f})-stats{1}.(fields{f});
 %
 %     r = regstats(y,X,'linear');
@@ -93,6 +93,8 @@ stage = 'Param Change';
 X = [stats{1}.omega-stats{2}.omega stats{1}.beta-stats{2}.beta];
 %y = stats{2}.LEDD - stats{1}.LEDD;
 y = stats{2}.LEDD_MaxDecrease;
+% y(16) = []
+% X(16,:) = []
 r = regstats(y,X,'linear');
 r.y = y;
 r.X = X;

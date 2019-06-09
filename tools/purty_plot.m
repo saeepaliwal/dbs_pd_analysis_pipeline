@@ -5,8 +5,8 @@ fontName = 'Helvetica';
 figure(figNum);
 hFig = figNum;
 
-titleFontSize = 15;
-axisFontSize = 12;
+titleFontSize = 20;
+axisFontSize = 20;
 % Get axes:
 hAxes = findobj(gcf,'type','axes','-not','Tag','legend','-not','Tag','Colorbar');
 

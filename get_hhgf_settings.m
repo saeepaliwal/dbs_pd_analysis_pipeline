@@ -38,12 +38,12 @@ pars.seed = 1;
 % pars.nburnin = 5000;
 % pars.niter = 15000;
 
-% pars.nburnin = 2000;
-% pars.niter = 10000;
+pars.nburnin = 2000;
+pars.niter = 5000;
 
 
-pars.nburnin = 200;
-pars.niter = 1000;
+% pars.nburnin = 200;
+% pars.niter = 1000;
 
 pars.nchains = nchains;
 

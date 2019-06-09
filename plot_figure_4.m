@@ -81,13 +81,13 @@ ylabel('\beta_{pre-DBS}')
 xlabel('BIS pre-DBS')
 
 subplot(3,4,7)
-scatter(stats{1}.BIS_MaxIncrease,stats{2}.omega-stats{1}.omega,msize,[0.5 0.5 0.5],...
+scatter(stats{1}.BIS_MaxIncrease,stats{1}.omega-stats{2}.omega,msize,[0.5 0.5 0.5],...
     'Marker','.')
 ylabel('\Delta\omega')
 xlabel('Max BIS Increase')
 
 subplot(3,4,8)
-scatter(stats{1}.LEDD_MaxDecrease,stats{2}.omega-stats{1}.omega,msize, [0.5 0.5 0.5],...
+scatter(stats{1}.LEDD_MaxDecrease,stats{1}.omega-stats{2}.omega,msize, [0.5 0.5 0.5],...
     'Marker','.')
 ylabel('\Delta\omega')
 xlabel('Max LEDD Decrease')
@@ -107,13 +107,13 @@ ylim([0 15])
 ylabel('\beta_{post-DBS}')
 
 subplot(3,4,11)
-scatter(stats{1}.BIS_MaxIncrease, stats{2}.beta-stats{1}.beta,msize,[0.3 0.3 0.3],...
+scatter(stats{1}.BIS_MaxIncrease, stats{1}.beta-stats{2}.beta,msize,[0.3 0.3 0.3],...
     'Marker','.')
 xlabel('Max BIS Increase')
 ylabel('\Delta\beta')
 
 subplot(3,4,12)
-scatter(stats{1}.LEDD_MaxDecrease, stats{2}.beta-stats{1}.beta,msize,[0.3 0.3 0.3],...
+scatter(stats{1}.LEDD_MaxDecrease, stats{1}.beta-stats{2}.beta,msize,[0.3 0.3 0.3],...
     'Marker','.')
 xlabel('Max LEDD Decrease')
 ylabel('\Delta\beta')
