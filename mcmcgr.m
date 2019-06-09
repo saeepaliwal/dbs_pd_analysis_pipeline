@@ -11,11 +11,12 @@
 % See also: MCMCSUMM
 
 
-function [ R ] = mcmcgr(A,ng) ;
+function [ R ] = mcmcgr(A,ng)
 
 [nr, nc, chainlen] = size(A) ;
 
 gsize = chainlen/ng ;
+
 
 X = NaN*zeros(nr,nc,ng,gsize);
 

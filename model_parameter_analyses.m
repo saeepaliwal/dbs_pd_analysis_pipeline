@@ -86,24 +86,25 @@ if display_figure
    % purty_plot(301,[D.FIGURES_DIR 'model_pars'],'pdf')
 end
 % 
-% %% Model comparison figure
-% grey = [0.7 0.7 0.7];
-% figure(101)
-% clf
-% hold on
-% 
-% b=bar([stats{1}.FE_grid], ...
-%     'FaceColor',grey,'EdgeColor','none');
-% %title('Group-level free energy, pre-DBS');
-% xticks(1:3);
-% xticklabels({'Std';'UD';'RW'});
-% ylim([-1942 -1935])
-% % set(gca,'YTick',[-1946 -1944 -1942 -1940 -1938 -1936],...
-% %     'YTickLabels',{'-2700';'-1944';'-1942';'-1940';'-1938';'-1936'});
-% % plot([0.5 0.65], [-1945 -1944.8],'k','LineWidth',2);
-% % plot([0.5 0.65], [-1944.8 -1944.6],'k','LineWidth',2);
-% ylabel('Free energy')
-% purty_plot(101,[D.FIGURES_DIR 'model_comparison'],'tiff')
+%% Model comparison figure
+grey = [0.7 0.7 0.7];
+figure(101)
+clf
+hold on
+
+b=bar([stats{1}.FE_grid], ...
+    'FaceColor',grey,'EdgeColor','none');
+%title('Group-level free energy, pre-DBS');
+xticks(1:3);
+xlim([0.5 3.5])
+xticklabels({'Std';'UD';'RW'});
+ylim([-2007 -1991])
+% set(gca,'YTick',[-1946 -1944 -1942 -1940 -1938 -1936],...
+%     'YTickLabels',{'-2700';'-1944';'-1942';'-1940';'-1938';'-1936'});
+% plot([0.5 0.65], [-1945 -1944.8],'k','LineWidth',2);
+% plot([0.5 0.65], [-1944.8 -1944.6],'k','LineWidth',2);
+ylabel('Free energy')
+purty_plot(101,['model_comparison'],'png')
 
 % %% Scatter plots
 % figure(1)

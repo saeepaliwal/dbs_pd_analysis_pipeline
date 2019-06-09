@@ -1,11 +1,13 @@
 function parameter_regressions(stats)
 close all
 % This function prints the results reported in Table 5 of the manuscript
-ls
+
 
 %% Run parameter regressions, pre and post
 fields = {'BIS_Total','BIS_NonPlanning','BIS_Motor','BIS_Attentional',...
-    'UPDRS_Total', 'BIS_MaxIncrease', 'UPDRS_MaxDecrease'};
+    'BIS_MaxIncrease', 'LEDD'};
+
+% fields = {'BIS_NonPlanning','BIS_Motor','BIS_Attentional'};
 for s = 1:2
     
     if s == 1
@@ -20,7 +22,7 @@ for s = 1:2
     % Behavioral regressions
     for f = 1:length(fields)
         
-        if strcmp(fields{f},'UPDRS')
+        if strcmp(fields{f},'LEDD')
             X = [stats{s}.omega stats{s}.beta];
             indep_vars = {'omega';'beta'};
         else
@@ -88,7 +90,7 @@ fields = {'BIS_MaxIncrease', 'UPDRS_MaxDecrease'};
 %% LEDD Change
 
 stage = 'Param Change';
-X = [stats{2}.omega-stats{1}.omega stats{2}.beta-stats{1}.beta];
+X = [stats{1}.omega-stats{2}.omega stats{1}.beta-stats{2}.beta];
 %y = stats{2}.LEDD - stats{1}.LEDD;
 y = stats{2}.LEDD_MaxDecrease;
 r = regstats(y,X,'linear');
@@ -98,6 +100,25 @@ r.X = X;
 reg_vals(r,stage,'LEDD Change',{'\Delta\omega';'\Delta\beta'})
 reg_figs(r,y,X,'LEDD Change', {'\Delta\omega';'\Delta\beta'})
 
+%%
+stage = 'Param Change';
+X = [stats{1}.omega-stats{2}.omega stats{1}.beta-stats{2}.beta stats{1}.BDI_Total'-stats{2}.BDI_Total'];
+%y = stats{2}.LEDD - stats{1}.LEDD;
+y = stats{2}.BIS_MaxIncrease;
+r = regstats(y,X,'linear');
+r.y = y;
+r.X = X;
+
+reg_vals(r,stage,'Max BIS Increase',{'\Delta\omega';'\Delta\beta'; 'BDI'})
+reg_figs(r,y,X,'Max BIS Increase', {'\Delta\omega';'\Delta\beta';'BDI'})
+
+%%
+pre_post_BIS_change = stats{2}.BIS_Total-stats{1}.BIS_Total;
+pre_post_LEDD_change = stats{2}.LEDD-stats{1}.LEDD;
+[cc, p] = corrcoef(pre_post_BIS_change', pre_post_LEDD_change')
+
+
+[cc, p] = corrcoef(stats{1}.BIS_MaxIncrease', stats{1}.LEDD_MaxDecrease')
 
 %
 % %% LEDD regressions

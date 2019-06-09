@@ -1,6 +1,6 @@
-function [hgf, rw, pars, inference] = get_hhgf_settings(resp_model)
+function [hgf, rw, pars, inference] = get_hhgf_settings(resp_model, num_chains)
 % Set number of chains
-nchains = 32;
+nchains = num_chains;
 
 
 % Construct transpose function from response model
@@ -35,11 +35,15 @@ hgf.empirical_priors.eta = 1;
 
 pars = struct();
 pars.seed = 1;
-pars.nburnin = 5000;
-pars.niter = 15000;
+% pars.nburnin = 5000;
+% pars.niter = 15000;
 
-% pars.nburnin = 200;
-% pars.niter = 200;
+% pars.nburnin = 2000;
+% pars.niter = 10000;
+
+
+pars.nburnin = 200;
+pars.niter = 1000;
 
 pars.nchains = nchains;
 
